@@ -77,8 +77,4 @@ public:
 		return physx::PxVec3(_x, _y, _z);
 	}
 
-	explicit operator physx::PxVec3() const {
-		return physx::PxVec3(_x, _y, _z);
-	}
-
 };
