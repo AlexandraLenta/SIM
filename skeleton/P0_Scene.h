@@ -20,5 +20,7 @@ public:
 private:
     std::vector<physx::PxTransform> _transforms;
     std::vector<RenderItem*> _items;
+
+    void createAxes();
 };
 

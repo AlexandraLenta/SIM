@@ -1,6 +1,7 @@
 #pragma once
 
 #include <PxPhysicsAPI.h>
+#include <iostream>
 
 class Vector3D
 {
@@ -49,6 +50,10 @@ public:
 		return { x, y, z };
 	}
 
+	static Vector3D cross(const Vector3D& v1, const Vector3D& v2) {
+		return v1.cross(v2);
+	}
+
 	bool operator=(const Vector3D& other) {
 		return _x == other._x && _y == other._y && _z == other._z;
 	}
@@ -78,3 +83,8 @@ public:
 	}
 
 };
+
+std::ostream& operator<<(std::ostream& os, Vector3D& v) {
+	os << '{' << v.x() << ',' << v.y() << ',' << v.z() << '}';
+	return os;
+}
