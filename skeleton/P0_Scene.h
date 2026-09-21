@@ -1,8 +1,10 @@
 #pragma once
 #include "Scene.h"
 #include <vector>
+#include <queue>
 
 class RenderItem;
+class Vector3D;
 
 class P0_Scene :
     public Scene
@@ -18,9 +20,11 @@ public:
     void cleanup() override;
 
 private:
-    std::vector<physx::PxTransform> _transforms;
+    std::deque<physx::PxTransform> _transforms;
     std::vector<RenderItem*> _items;
 
     void createAxes();
+    void testVisualField();
+    void createSphere(Vector3D const& pos, physx::PxVec4 color);
 };
 
