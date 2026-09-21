@@ -13,7 +13,9 @@ void P0_Scene::init() {
 
 	createAxes();
 
-	testVisualField();
+	//testVisualField();
+
+	testLerp();
 }
 
 void P0_Scene::update(double dt) {
@@ -61,22 +63,56 @@ void P0_Scene::testVisualField() {
 
 	for (auto pos : positions) {
 		if (Vector3D::dot(enemyDir, pos) == 0) {
-			createSphere(pos, yellow);
+			createSphere(pos, yellow, 2);
 		}
 
 		else if (Vector3D::dot(enemyDir, pos) < 0) {
-			createSphere(pos, red);
+			createSphere(pos, red, 2);
 		}
 
 		else if (Vector3D::dot(enemyDir, pos) > 0) {
-			createSphere(pos, green);
+			createSphere(pos, green, 2);
 		}
 	}
 }
 
-void P0_Scene::createSphere(Vector3D const& pos, physx::PxVec4 color) {
-	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(2.0f));
+void P0_Scene::createSphere(const Vector3D& pos, physx::PxVec4 color, float size) {
+	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(size));
 
 	_transforms.push_back(physx::PxTransform(pos));
 	_items.push_back(new RenderItem(shape, &_transforms[(_transforms.size() - 1)], color));
+}
+
+void P0_Scene::testLerp() {
+	Vector3D a = { -8, 1, -8 };
+	Vector3D b = { 8, 8, 8 };
+	
+	auto formula = [](const Vector3D& A, const Vector3D& B, const double t) {
+		return A + t * (B - A);
+	};
+
+	int times = 10;
+	double startT = 0;
+	double finalT = 1;
+	double increment = (finalT - startT) / times;
+
+	Vector4 color = { 1, 0, 1, 1 };
+
+	// start point yes, end point no
+	for (int i = 0; i < times; i++) {
+		double t = startT + i * increment;
+		createSphere(formula(a, b, t), color, 1);
+	}
+
+	//// neither start point nor end point
+	//for (int i = 0; i < times; i++) {
+	//	double t = (i + 1) / (double)(times + 1);
+	//	createSphere(formula(a, b, t), color, 1);
+	//}
+
+	//// both start point and end point
+	//for (int i = 0; i < times; i++) {
+	//	double t = i / (double)(times - 1);
+	//	createSphere(formula(a, b, t), color, 1);
+	//}
 }

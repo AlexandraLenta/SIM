@@ -25,6 +25,7 @@ private:
 
     void createAxes();
     void testVisualField();
-    void createSphere(Vector3D const& pos, physx::PxVec4 color);
+    void createSphere(const Vector3D& pos, physx::PxVec4 color, float size);
+    void testLerp();
 };
 

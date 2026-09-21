@@ -70,15 +70,15 @@ public:
 		return *this;
 	}
 
-	Vector3D operator+(const Vector3D& other) {
+	Vector3D operator+(const Vector3D& other) const {
 		return { _x + other._x, _y + other._y, _z + other._z };
 	}
 
-	Vector3D operator-(const Vector3D& other) {
+	Vector3D operator-(const Vector3D& other) const {
 		return { _x - other._x, _y - other._y, _z - other._z };
 	}
 
-	Vector3D operator*(const float a) {
+	Vector3D operator*(const float a) const {
 		return { _x * a, _y * a, _z * a };
 	}
 
@@ -91,4 +91,8 @@ public:
 inline std::ostream& operator<<(std::ostream& os, const Vector3D& v) {
 	os << '{' << v.x() << ',' << v.y() << ',' << v.z() << '}';
 	return os;
+}
+
+inline Vector3D operator*(const float a, Vector3D& v) {
+	return v * a;
 }
