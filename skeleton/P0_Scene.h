@@ -5,6 +5,7 @@
 
 class RenderItem;
 class Vector3D;
+class Particle;
 
 class P0_Scene :
     public Scene
@@ -22,10 +23,12 @@ public:
 private:
     std::deque<physx::PxTransform> _transforms;
     std::vector<RenderItem*> _items;
+    Particle* _particle;
 
     void createAxes();
     void testVisualField();
     void createSphere(const Vector3D& pos, physx::PxVec4 color, float size);
     void testLerp();
+    void createParticle();
 };
 

@@ -1,6 +1,7 @@
 #include "P0_Scene.h"
 #include "RenderUtils.hpp"
 #include "Vector3D.h"
+#include "Particle.h"
 
 
 P0_Scene::P0_Scene(std::string name) : Scene(std::move(name)) {}
@@ -11,15 +12,17 @@ void P0_Scene::init() {
 	_transforms.push_back(physx::PxTransform(Vector3D(0, 0, 0)));
 	_items.push_back(new RenderItem(shape, &_transforms[0], Vector4(1, 1, 1, 1)));
 
-	createAxes();
+	//createAxes();
 
 	//testVisualField();
 
-	testLerp();
+	//testLerp();
+
+	createParticle();
 }
 
 void P0_Scene::update(double dt) {
-
+	_particle->integrate(dt);
 }
 
 void P0_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
@@ -31,6 +34,8 @@ void P0_Scene::cleanup() {
 		item->release();
 	}
 	_items.clear();
+
+	delete _particle;
 }
 
 void P0_Scene::createAxes() {
@@ -115,4 +120,8 @@ void P0_Scene::testLerp() {
 	//	double t = i / (double)(times - 1);
 	//	createSphere(formula(a, b, t), color, 1);
 	//}
+}
+
+void P0_Scene::createParticle() {
+	_particle = new Particle({ 0, 0, 0 }, { 1, 0, 0 });
 }
