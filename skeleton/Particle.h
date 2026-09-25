@@ -5,16 +5,18 @@
 class Particle
 {
 public:
-	Particle(Vector3D pos, Vector3D vel, Vector3 a);
+	Particle(Vector3D pos = { 0, 0, 0 }, Vector3D vel = { 1, 0, 0 }, Vector3 a = { 0, 0, 0 }, float d = 1);
 	~Particle();
 
-	void integrate(double t);
+	void integrateEuler(double t);
+	void integrateEulerSemiImplicit(double t);
+	void integrateVerlet(double t);
 
 private:
 	Vector3D vel;
 	physx::PxTransform pose;
 	Vector3D a;
-	float damping = 1;
+	float damping; // por defecto sin damping
 	RenderItem* renderItem;
 };
 

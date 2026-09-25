@@ -22,7 +22,7 @@ void P0_Scene::init() {
 }
 
 void P0_Scene::update(double dt) {
-	_particle->integrate(dt);
+	_particle->integrateEuler(dt);
 }
 
 void P0_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
