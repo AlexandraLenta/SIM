@@ -5,7 +5,7 @@
 class Particle
 {
 public:
-	Particle(Vector3D pos = { 0, 0, 0 }, Vector3D vel = { 0, 0, 0 }, Vector3 a = { 0, 0, 0 }, float d = 1);
+	Particle(Vector3D pos = { 0, 0, 0 }, Vector3D vel = { 0, 0, 0 }, Vector3D a = { 0, 0, 0 }, float d = 1);
 	~Particle();
 
 	void integrateEuler(double t);

@@ -22,7 +22,7 @@ void P0_Scene::init() {
 }
 
 void P0_Scene::update(double dt) {
-	_particle->integrateEuler(dt);
+	_particle->integrateEulerSemiImplicit(dt);
 }
 
 void P0_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
@@ -124,5 +124,5 @@ void P0_Scene::testLerp() {
 }
 
 void P0_Scene::createParticle() {
-	_particle = new Particle({ 0, 0, 0 }, { 1, 0, 0 }, { 2, .5, 0 });
+	_particle = new Particle({ 0, 0, 0 }, { 0, 0, 0 }, { 0, 100, 0 });
 }
