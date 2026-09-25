@@ -1,6 +1,6 @@
 #include "Particle.h"
 
-Particle::Particle(Vector3D pos, Vector3D vel) : vel(vel), pose(pos) {
+Particle::Particle(Vector3D pos, Vector3D vel, Vector3 a) : vel(vel), pose(pos), a(a) {
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(1.0f));
 	renderItem = new RenderItem(shape, &pose, Vector4(1, 0, 0, 1));
 }
@@ -15,7 +15,10 @@ void Particle::integrate(double t) {
 
 	//vel = (vel + a * t) * pow(d, t);
 
-	pose.p = pose.p + (vel * t); // DUDA: no se como actualizar pose entero, solo su PxVec3, y no su PxQuat
+	vel = (vel + a * t) * damping;
+
+	pose.p = pose.p + (vel * t);
+
 
 	//F = 0;
 }

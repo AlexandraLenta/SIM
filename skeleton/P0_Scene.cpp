@@ -12,7 +12,7 @@ void P0_Scene::init() {
 	_transforms.push_back(physx::PxTransform(Vector3D(0, 0, 0)));
 	_items.push_back(new RenderItem(shape, &_transforms[0], Vector4(1, 1, 1, 1)));
 
-	//createAxes();
+	createAxes();
 
 	//testVisualField();
 
@@ -36,6 +36,7 @@ void P0_Scene::cleanup() {
 	_items.clear();
 
 	delete _particle;
+	_particle = nullptr;
 }
 
 void P0_Scene::createAxes() {
@@ -123,5 +124,5 @@ void P0_Scene::testLerp() {
 }
 
 void P0_Scene::createParticle() {
-	_particle = new Particle({ 0, 0, 0 }, { 1, 0, 0 });
+	_particle = new Particle({ 0, 0, 0 }, { 1, 0, 0 }, { 0.5, 0.2, 0 });
 }
