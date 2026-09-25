@@ -124,5 +124,5 @@ void P0_Scene::testLerp() {
 }
 
 void P0_Scene::createParticle() {
-	_particle = new Particle({ 0, 0, 0 }, { 1, 0, 0 }, { 0.5, 0.2, 0 });
+	_particle = new Particle({ 0, 0, 0 }, { 1, 0, 0 }, { 2, .5, 0 });
 }

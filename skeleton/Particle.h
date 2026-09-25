@@ -5,7 +5,7 @@
 class Particle
 {
 public:
-	Particle(Vector3D pos = { 0, 0, 0 }, Vector3D vel = { 1, 0, 0 }, Vector3 a = { 0, 0, 0 }, float d = 1);
+	Particle(Vector3D pos = { 0, 0, 0 }, Vector3D vel = { 0, 0, 0 }, Vector3 a = { 0, 0, 0 }, float d = 1);
 	~Particle();
 
 	void integrateEuler(double t);
@@ -15,6 +15,7 @@ public:
 private:
 	Vector3D vel;
 	physx::PxTransform pose;
+	physx::PxTransform previousPose;
 	Vector3D a;
 	float damping; // por defecto sin damping
 	RenderItem* renderItem;
