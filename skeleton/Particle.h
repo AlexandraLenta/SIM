@@ -5,11 +5,11 @@
 class Particle
 {
 public:
-	Particle(Vector3D pos = { 0, 0, 0 }, Vector3D vel = { 0, 0, 0 }, Vector3D a = { 0, 0, 0 }, float d = 1);
+	Particle(Vector3D pos = { 0, 0, 0 }, Vector3D dir = { 0, 0, 0 }, Vector3D a = { 0, 0, 0 }, float d = 1);
 	~Particle();
 
 	void integrateEuler(double t);
-	void integrateEulerSemiImplicit(double t);
+	virtual void integrateEulerSemiImplicit(double t);
 	void integrateVerlet(double t);
 	 
 	void setPos(Vector3D p);

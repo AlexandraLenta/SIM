@@ -4,8 +4,11 @@ class Projectile :
     public Particle
 {
 public:
-    Projectile(Vector3D pos = { 0, 0, 0 }, Vector3D vel = { 0, 0, 0 }, Vector3D a = { 0, 0, 0 }, float mR = 5, float d = 1);
+    Projectile(Vector3D pos = { 0, 0, 0 }, float mR = 5, float sR = 100, float sS = 25, float d = 1);
+    ~Projectile();
     void changeRealMass(float amount);
+    void integrateEulerSemiImplicit(double t) override;
+    void shoot(physx::PxTransform origin, Vector3D dir);
 
 private:
     float _realMass;

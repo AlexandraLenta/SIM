@@ -3,7 +3,6 @@
 #include "Vector3D.h"
 #include "Particle.h"
 
-
 P0_Scene::P0_Scene(std::string name) : Scene(std::move(name)) {}
 
 void P0_Scene::init() {
@@ -94,7 +93,7 @@ void P0_Scene::testLerp() {
 	Vector3D b = { 8, 8, 8 };
 	
 	auto formula = [](const Vector3D& A, const Vector3D& B, const double t) {
-		return A + t * (B - A);
+		return A + (B - A) * t;
 	};
 
 	int times = 10;

@@ -5,7 +5,7 @@
 
 class RenderItem;
 class Vector3D;
-class Particle;
+class Projectile;
 
 class P1_Scene :
     public Scene
@@ -23,6 +23,7 @@ public:
 private:
     std::deque<physx::PxTransform> _transforms;
     std::vector<RenderItem*> _items;
+    Projectile* _proj;
 
     void createAxes();
 };
