@@ -11,13 +11,19 @@ public:
 	void integrateEuler(double t);
 	void integrateEulerSemiImplicit(double t);
 	void integrateVerlet(double t);
+	 
+	void setPos(Vector3D p);
+	void setPos(physx::PxTransform p);
+	void setVel(Vector3D v);
+	void setAcceleration(Vector3D a);
 
-private:
-	Vector3D vel;
-	physx::PxTransform pose;
-	physx::PxTransform previousPose;
-	Vector3D a;
-	float damping; // por defecto sin damping
-	RenderItem* renderItem;
+protected:
+	physx::PxTransform _pose;
+	physx::PxTransform _previousPose;
+	
+	Vector3D _vel;
+	Vector3D _a;
+	float _damping; // por defecto sin damping
+
+	RenderItem* _renderItem;
 };
-

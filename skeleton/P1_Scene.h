@@ -1,17 +1,17 @@
 #pragma once
-    #include "Scene.h"
-    #include <vector>
-    #include <queue>
+#include "Scene.h"
+#include <vector>
+#include <queue>
 
 class RenderItem;
 class Vector3D;
 class Particle;
 
-class P0_Scene :
+class P1_Scene :
     public Scene
 {
 public:
-    explicit P0_Scene(std::string name);
+    explicit P1_Scene(std::string name);
 
     void init() override;
 
@@ -23,12 +23,7 @@ public:
 private:
     std::deque<physx::PxTransform> _transforms;
     std::vector<RenderItem*> _items;
-    Particle* _particle;
 
     void createAxes();
-    void testVisualField();
-    void createSphere(const Vector3D& pos, physx::PxVec4 color, float size);
-    void testLerp();
-    void createParticle();
 };
 
