@@ -16,7 +16,7 @@ void Projectile::changeRealMass(float amount) {
 
 void Projectile::calculateSimulatedValues() {
 
-	_simulatedMass = _realMass * (_realSpeed / _simulatedSpeed) * (_realSpeed / _simulatedSpeed);
+	_simulatedMass = _realMass * ((_realSpeed / _simulatedSpeed) * (_realSpeed / _simulatedSpeed));
 	
 	_simulatedGravity = _realGravity * ((_simulatedSpeed / _realSpeed) * (_simulatedSpeed / _realSpeed));
 }

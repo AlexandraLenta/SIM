@@ -23,7 +23,7 @@ void P1_Scene::update(double dt) {
 
 void P1_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
 	if (key == 'h' || key == 'H') {
-		_projPool->shoot({ 1, 1, 0 }, { 1, 1, 0 });
+		_projPool->shoot(camera, {1, 1, 0});
 	}
 }
 
