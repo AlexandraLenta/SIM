@@ -4,7 +4,7 @@ class Projectile :
     public Particle
 {
 public:
-    Projectile(Vector3D pos = { 0, 0, 0 }, float mR = 5, float sR = 100, float sS = 25, float d = 1);
+    Projectile(Vector3D pos = { 0, 0, 0 }, float mR = 5, float sR = 1000, float sS = 25, float d = 1);
     ~Projectile();
     void changeRealMass(float amount);
     void integrateEulerSemiImplicit(double t) override;
