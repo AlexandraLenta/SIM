@@ -23,7 +23,8 @@ void P1_Scene::update(double dt) {
 
 void P1_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
 	if (key == 'h' || key == 'H') {
-		_projPool->shoot(camera, {1, 1, 0});
+		physx::PxVec3 direction = camera.q.rotate(physx::PxVec3{ 0, 0, -1 });
+		_projPool->shoot(camera, direction);
 	}
 }
 
