@@ -1,12 +1,14 @@
 #include "ProjectilePool.h"
 
-ProjectilePool::ProjectilePool(int nr) : _index(0), _count(nr) {
+ProjectilePool::ProjectilePool(int nr, float sp) : _index(0), _count(nr), _speed(sp) {
 
 }
 
 void ProjectilePool::shoot(physx::PxTransform origin, Vector3D dir) {
 	if (_pool.size() < _count) {
-		_pool.emplace_back(new Projectile(), 0); // populate pool
+		Projectile* p = new Projectile();
+		p->setRealSpeed(_speed);
+		_pool.emplace_back(p, 0); // populate pool
 		_index = _pool.size() - 1;
 	}
 	else {
@@ -42,6 +44,17 @@ void ProjectilePool::updatePool(float t) {
 		}
 		
 	}
+}
+
+void ProjectilePool::changeSpeed(float s) {
+	_speed += s;
+	for (auto p : _pool) {
+		p.first->changeRealSpeed(s);
+	}
+}
+
+float ProjectilePool::getSpeed() {
+	return _speed;
 }
 
 const float ProjectilePool::PROJECTILE_SURVIVE_TIME = 8.0f;

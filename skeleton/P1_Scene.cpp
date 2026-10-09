@@ -26,6 +26,14 @@ void P1_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
 		physx::PxVec3 direction = camera.q.rotate(physx::PxVec3{ 0, 0, -1 });
 		_projPool->shoot(camera, direction);
 	}
+	else if (key == 'i' || key == 'I') {
+		_projPool->changeSpeed(-10);
+		std::cout << "DECREASE " << _projPool->getSpeed();
+	}
+	else if (key == 'o' || key == 'O') {
+		_projPool->changeSpeed(10);
+		std::cout << "INCREASE " << _projPool->getSpeed();
+	}
 }
 
 void P1_Scene::cleanup() {
