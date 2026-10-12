@@ -2,10 +2,10 @@
 #include "Scene.h"
 #include <vector>
 #include <queue>
+#include "Particle.h"
 
 class RenderItem;
 class Vector3D;
-class ProjectilePool;
 
 class P1_Scene :
     public Scene
@@ -23,7 +23,8 @@ public:
 private:
     std::deque<physx::PxTransform> _transforms;
     std::vector<RenderItem*> _items;
-    ProjectilePool* _projPool;
+    //ProjectilePool* _projPool;
+    Particle* p;
 
     void createAxes();
 };

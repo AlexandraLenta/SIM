@@ -2,6 +2,7 @@
 
 #include "RenderUtils.hpp"
 #include "Vector3D.h"
+#include "Particle.h"
 #include "ProjectilePool.h"
 
 P1_Scene::P1_Scene(std::string name) : Scene(std::move(name)) {}
@@ -13,27 +14,40 @@ void P1_Scene::init() {
 	_items.push_back(new RenderItem(shape, &_transforms[0], Vector4(1, 1, 1, 1)));
 
 	createAxes();
+	p = new Particle(10);
+	p->position = { 1, 1, 0 };
+	p->velocity = { 0, 0.5, 0 };
+	p->acceleration = { 0, 0, 0 };
+	p->simulatedSpeed = 10;
+	p->realSpeed = 100;
+	p->realMass = 5;
+	p->realGravity = -9.8;
+	p->damping = 1;
+	p->color = { 1, 1, 1, 1 };
+	p->calculateSimulatedValues();
 
-	_projPool = new ProjectilePool(20);
+	//_projPool = new ProjectilePool(20);
 }
 
 void P1_Scene::update(double dt) {
-	_projPool->updatePool(dt);
+	std::cout << p->position.p << '\n';
+	//_projPool->updatePool(dt);
+	p->integrateEulerSemiImplicit(dt);
 }
 
 void P1_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
-	if (key == 'h' || key == 'H') {
-		physx::PxVec3 direction = camera.q.rotate(physx::PxVec3{ 0, 0, -1 });
-		_projPool->shoot(camera, direction);
-	}
-	else if (key == 'i' || key == 'I') {
-		_projPool->changeSpeed(-10);
-		std::cout << "DECREASE " << _projPool->getSpeed();
-	}
-	else if (key == 'o' || key == 'O') {
-		_projPool->changeSpeed(10);
-		std::cout << "INCREASE " << _projPool->getSpeed();
-	}
+	//if (key == 'h' || key == 'H') {
+	//	physx::PxVec3 direction = camera.q.rotate(physx::PxVec3{ 0, 0, -1 });
+	//	_projPool->shoot(camera, direction);
+	//}
+	//else if (key == 'i' || key == 'I') {
+	//	_projPool->changeSpeed(-10);
+	//	std::cout << "DECREASE " << _projPool->getSpeed();
+	//}
+	//else if (key == 'o' || key == 'O') {
+	//	_projPool->changeSpeed(10);
+	//	std::cout << "INCREASE " << _projPool->getSpeed();
+	//}
 }
 
 void P1_Scene::cleanup() {
@@ -42,8 +56,8 @@ void P1_Scene::cleanup() {
 	}
 	_items.clear();
 
-	delete _projPool;
-	_projPool = nullptr;
+	//delete _projPool;
+	//_projPool = nullptr;
 }
 
 void P1_Scene::createAxes() {

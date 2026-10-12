@@ -4,7 +4,7 @@
 class NormalDistribution
 {
 public:
-	NormalDistribution();
+	NormalDistribution(float mean = 0, float dev = 1);
 	double generate();
 	
 private:

@@ -1,80 +1,53 @@
 #include "Particle.h"
 
-Particle::Particle(Vector3D pos, Vector3D dir, Vector3D a, float life, Vector4 color, float mR, float sR, float sS, float d) : _vel(dir), _pose(pos), _previousPose(_pose), _a(a), _lifetime(life), _color(color), _damping(d), _realMass(mR), _realGravity(9.8f), _realSpeed(sR), _simulatedSpeed(sS) {
+Particle::Particle(float radius) {
 	// crear la particula visualmente
-	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(1.0f));
-	_renderItem = new RenderItem(shape, &_pose, Vector4(1, 0, 0, 1));
+	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
+	renderItem = new RenderItem(shape, &position, Vector4(1, 0, 0, 1));
 
-	calculateSimulatedValues();
+	//calculateSimulatedValues();
 }
 
 Particle::~Particle() {
-	_renderItem->release();
-	_renderItem = nullptr;
+	if (renderItem) {
+		renderItem->release();
+		renderItem = nullptr;
+	}
 }
 
-void Particle::setPos(Vector3D p) {
-	_pose = physx::PxTransform(p);
-}
-
-void Particle::setPos(physx::PxTransform p) {
-	_pose = p;
-}
-
-void Particle::setDir(Vector3D v) {
-	_vel = v;
-}
-
-void Particle::setRealSpeed(float s) {
-	_realSpeed = s;
-	calculateSimulatedValues();
-}
-
-void Particle::setAcceleration(Vector3D a) {
-	_a = a;
-}
 
 void Particle::integrateEuler(double t) {
-	_pose.p = _pose.p + (_vel * t); // actualizar el Vec3 de PxTransform (actualizar la posicion)
+	position.p = position.p + (velocity * t); // actualizar la posicion
 
-	_vel = (_vel + _a * t) * pow(_damping, t); // actualizar velocidad en base a aceleracion constante
+	velocity = (velocity + acceleration * t) * pow(damping, t); // actualizar velocidad en base a aceleracion constante
 
-	_a = 0; // resetear la aceleracion despues del empuje
+	acceleration = 0; // resetear la aceleracion despues del empuje
 }
 
 void Particle::integrateEulerSemiImplicit(double t) {
-	_a = { 0, -_simulatedGravity, 0 }; // resetear la aceleracion a la gravedad
-	
-	_vel = _vel.normalized() * _simulatedSpeed;
+	acceleration = {0, simulatedGravity, 0};
+	velocity = velocity .normalized() * simulatedSpeed;
 
-	_vel = (_vel + _a * t) * pow(_damping, t); // actualizar velocidad en base a aceleracion constante
+	velocity = (velocity + acceleration * t) * pow(damping, t); // actualizar velocidad en base a aceleracion constante
 
-	_pose.p = _pose.p + (_vel * t); // actualizar el Vec3 de PxTransform (actualizar la posicion)
+	position.p = position.p + (velocity * t); // actualizar la posicion
 
-	_a = 0; // resetear la aceleracion despues del empuje
+	acceleration = 0; // resetear la aceleracion despues del empuje
 }
 
 void Particle::integrateVerlet(double t) {
-	physx::PxTransform tempPose = _previousPose;
-	_previousPose = _pose;
+	physx::PxTransform tempPose = prevPosition;
+	prevPosition = position;
 
-	_pose.p = 2 * _previousPose.p - tempPose.p + _a * t * t;
+	position.p = 2 * prevPosition.p - tempPose.p + acceleration * t * t;
 
-	//std::cout << "Past: " << tempPose.p << "\nCurrent: " << previousPose.p << "\nNew: " << pose.p << '\n';
-
-	std::cout << _previousPose.p - tempPose.p << '\n';
-
-	_a = { 0,0,0 }; // resetear la aceleracion despues del empuje
+	acceleration = 0; // resetear la aceleracion despues del empuje
 }
 
 void Particle::calculateSimulatedValues() {
 
-	_simulatedMass = _realMass * ((_realSpeed / _simulatedSpeed) * (_realSpeed / _simulatedSpeed));
+	simulatedMass = realMass * ((realSpeed / simulatedSpeed) * (realSpeed / simulatedSpeed));
 
-	_simulatedGravity = _realGravity * ((_simulatedSpeed / _realSpeed) * (_simulatedSpeed / _realSpeed));
-}
-
-void Particle::setGravity(float y) {
-	_realGravity = y;
-	calculateSimulatedValues();
+	simulatedGravity = realGravity * ((simulatedSpeed / realSpeed) * (simulatedSpeed / realSpeed));
+	std::cout << simulatedGravity << '\n';
 }
