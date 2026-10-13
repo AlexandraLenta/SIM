@@ -14,15 +14,15 @@ void P1_Scene::init() {
 	_items.push_back(new RenderItem(shape, &_transforms[0], Vector4(1, 1, 1, 1)));
 
 	createAxes();
-	p = new Particle(10);
+	p = new Particle(0.8, {1, 0, 0, 1});
 	p->position = { 1, 1, 0 };
-	p->velocity = { 0, 0.5, 0 };
+	p->velocity = { 0.5, 0.5, 0 };
 	p->acceleration = { 0, 0, 0 };
-	p->simulatedSpeed = 10;
-	p->realSpeed = 100;
-	p->realMass = 5;
-	p->realGravity = -9.8;
-	p->damping = 1;
+	p->simulatedSpeed = 12;
+	p->realSpeed = 60;
+	p->realMass = 8;
+	p->realGravity = -9.81;
+	p->damping = 0.99;
 	p->color = { 1, 1, 1, 1 };
 	p->calculateSimulatedValues();
 

@@ -8,10 +8,12 @@ struct Particle {
 	float radius;
 	Vector3D velocity;
 	Vector3D acceleration;
+	Vector3D force;
 	float lifetime;
 	Vector4 color;
 	float realMass;
 	float simulatedMass;
+	float massInverse;
 	float realSpeed;
 	float simulatedSpeed;
 	float realGravity;
@@ -19,7 +21,8 @@ struct Particle {
 	float damping = 1;
 
 	Particle() = default;
-	Particle(float radius);
+	Particle(float radius, Vector4 color);
+	Particle(Particle& config);
 	~Particle();
 
 	void integrateEuler(double t);
@@ -27,6 +30,7 @@ struct Particle {
 	void integrateVerlet(double t);
 
 	void calculateSimulatedValues();
+	void createRenderItem();
 
 	RenderItem* renderItem;
 };

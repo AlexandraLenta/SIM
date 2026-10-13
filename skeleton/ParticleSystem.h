@@ -2,7 +2,7 @@
 #include "Vector3D.h"
 #include <vector>
 #include "NormalDistribution.h"
-
+#include "Particle.h"
 
 // NOTES
 //for (int i = 0; i < toEmit; ++i) {
@@ -158,8 +158,6 @@
 //        }
 //
 
-struct Particle;
-
 class ParticleGenerator {
 public:
 	enum class GeneratorShape {
@@ -168,12 +166,13 @@ public:
 		SQUARE
 	};
 
-	ParticleGenerator(GeneratorShape type);
-	Particle* spawn(Vector3D startingPos, Vector3D dir);
+	ParticleGenerator(GeneratorShape type, Particle& config);
+	Particle* spawn(Vector3D startingPos);
 
 private:
 	NormalDistribution _g;
 	GeneratorShape _shape;
+	Particle& _config;
 };
 
 class ParticleSystem
@@ -190,9 +189,10 @@ public:
 
 	void update(double t);
 
-	void setGenerator(ParticleGenerator& gen);
+	void setGenerator(ParticleGenerator gen);
 
 private:
-	std::vector<Particle> _particles;
+	std::vector<Particle*> _particles;
 	ParticleGenerator _gen;
+	Particle _particleConfig;
 };
