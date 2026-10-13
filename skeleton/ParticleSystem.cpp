@@ -1,28 +1,17 @@
 #include "ParticleSystem.h"
 #include "Particle.h"
-
-ParticleGenerator::ParticleGenerator(GeneratorShape type, Particle& config) : _shape(type), _config(config) {
-	_g = NormalDistribution();
-}
-
-Particle* ParticleGenerator::spawn(Vector3D startingPos) {
-	Particle* p = new Particle(_config);
-
-	
-	
-	//switch (_shape) {
-	//	case GeneratorShape::POINT
-	//}
-
-	return p;
-}
+#include "ParticleGenerator.h"
 
 ParticleSystem::ParticleSystem(Vector3D pos, Particle config) : _particleConfig(config), _gen(ParticleGenerator::GeneratorShape::POINT, config) {
-	for (size_t i = 0; i < INITIAL_PARTICLES; i++) {
-		_particles.push_back(_gen.spawn(pos));
-	}
+	_particles.reserve(MAX_PARTICLES);
 }
 
 void ParticleSystem::setGenerator(ParticleGenerator g) {
 	//_gen = g;
 }
+
+// SO! the way this is going to work. particle system can hold many generators
+// it updates those generators and passes dt
+// the generators generate particles and return them to the system, which stores them in a vector and upadtse them an decides their death time and stuff and takes care of the pooling
+// so there is going to be a general generator/emitter...
+// and either give it a type orrr do inheritance

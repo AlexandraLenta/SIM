@@ -19,6 +19,7 @@
     <ClCompile Include="ProjectilePool.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="NormalDistribution.cpp" />
+    <ClCompile Include="ParticleGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="NormalDistribution.h" />
+    <ClInclude Include="ParticleGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

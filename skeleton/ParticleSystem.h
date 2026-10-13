@@ -158,27 +158,10 @@
 //        }
 //
 
-class ParticleGenerator {
-public:
-	enum class GeneratorShape {
-		POINT,
-		CONE,
-		SQUARE
-	};
-
-	ParticleGenerator(GeneratorShape type, Particle& config);
-	Particle* spawn(Vector3D startingPos);
-
-private:
-	NormalDistribution _g;
-	GeneratorShape _shape;
-	Particle& _config;
-};
-
 class ParticleSystem
 {
 public:
-	static constexpr size_t INITIAL_PARTICLES = 100;
+	static constexpr size_t MAX_PARTICLES = 100;
 
 	/// <summary>
 	/// 
