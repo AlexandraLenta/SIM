@@ -19,21 +19,7 @@
 //Particle& p = m_particles[i];
 //if (!p.alive) continue;
 //
-//// Emitter physics
-//m_emitter.applyPhysics(p, dt);
-//
-//// Mouse interaction
-//if (m_mouseAttract || m_mouseRepel) {
-//    sf::Vector2f toMouse = m_mousePos - p.position;
-//    float dist = length(toMouse);
-//    if (dist > 1.f && dist < 400.f) {
-//        sf::Vector2f dir = normalize(toMouse);
-//        float strength = mouseForce * (1.f - dist / 400.f);
-//        if (m_mouseRepel) strength = -strength * 1.5f;
-//        p.velocity += dir * strength * dt;
-//    }
-//}
-//
+
 //p.update(dt);
 //
 //// Soft boundary bounce
@@ -45,19 +31,7 @@
 //
 //++m_activeCount;
 //        }
-// 
-// this would be in case i want maybe to make some mouse interaction
-// 
-// 
-// AND this below is the update. the particle here is a struct
-//     void update(float dt) {
-//if (!alive) return;
-//velocity += acceleration * dt;
-//velocity *= drag;
-//position += velocity * dt;
-//age += dt;
-//if (age >= lifetime) alive = false;
-//    }
+
 //
 //    // Color shifts with age: bright → saturated → fades
 //    sf::Color getColor() const {
@@ -89,9 +63,6 @@
 //    float          lineLength = 300.f;   // for Line emitter
 //    float          burstCooldown = 0.5f;    // for Burst emitter
 //    float          vortexStrength = 300.f;
-//
-//    Emitter() = default;
-//    Emitter(sf::Vector2f pos, EmitterType t) : position(pos), type(t) {}
 //
 //    // Spawn a single particle
 //    Particle spawn() const {
@@ -163,18 +134,17 @@ class ParticleSystem
 public:
 	static constexpr size_t MAX_PARTICLES = 100;
 
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="pos">Position of the </param>
-	/// <param name="config"></param>
-	ParticleSystem(Vector3D pos, Particle config);
+	ParticleSystem(Particle config);
+
+	~ParticleSystem();
 
 	void update(double t);
 
-	//void addGenerator(ParticleGenerator gen);
+	void addGenerator(ParticleGenerator* g);
 
 private:
 	std::vector<Particle*> _particles;
+	std::vector<Particle*> _queuedParticles;
+	std::vector<ParticleGenerator*> _generators;
 	Particle _particleConfig;
 };

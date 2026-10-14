@@ -3,27 +3,40 @@
 #include "RenderUtils.hpp"
 
 struct Particle {
+	float radius;
+	Vector4 color;
+
 	physx::PxTransform position;
 	physx::PxTransform prevPosition;
-	float radius;
+
 	Vector3D velocity;
 	Vector3D acceleration;
 	Vector3D force;
-	float lifetime;
-	Vector4 color;
+	
 	float realMass;
 	float simulatedMass;
 	float massInverse;
+	
 	float realSpeed;
 	float simulatedSpeed;
+	
 	float realGravity;
 	float simulatedGravity;
+	
 	float damping = 1;
+
+	bool alive = true;
+	double lifetime;
+	double age = 0.0;
 
 	Particle() = default;
 	Particle(float radius, Vector4 color);
 	Particle(Particle& config);
 	~Particle();
+
+	void createRenderItem();
+
+	void update(double t);
 
 	void integrateEuler(double t);
 	void integrateEulerSemiImplicit(double t);
@@ -31,8 +44,9 @@ struct Particle {
 
 	void calculateSimulatedValues();
 
+	void changeColor(Vector4 c);
+
 private:
-	void createRenderItem();
 
 	void clearAccumulator();
 

@@ -83,6 +83,10 @@ void P1_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
 	//	_projPool->changeSpeed(10);
 	//	std::cout << "INCREASE " << _projPool->getSpeed();
 	//}
+	if (key == 'f') {
+		pArtillery->changeColor({ 1, 1, 1, 1 });
+		std::cout << "Changing colors\n";
+	}
 }
 
 void P1_Scene::cleanup() {

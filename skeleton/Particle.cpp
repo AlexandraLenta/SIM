@@ -6,20 +6,28 @@ Particle::Particle(float radius, Vector4 color) : radius(radius), color(color) {
 
 Particle::Particle(Particle& config) {
 
+	radius = config.radius;
+	color = config.color;
+
 	position = config.position;
 	prevPosition = config.prevPosition;
-	radius = config.radius;
+
 	velocity = config.velocity;
-	acceleration = config.acceleration;
-	lifetime = config.lifetime;
-	color = config.color;
+	acceleration = config.acceleration; 
+	force = { 0, 0, 0 };
+
 	realMass = config.realMass;
 	simulatedMass = config.simulatedMass;
+	massInverse = realMass > 0.0f ? 1.f / realMass : 0.0f;
+	
 	realGravity = config.realGravity;
 	simulatedGravity = config.simulatedGravity;
+	
 	damping = config.damping;
-	force = { 0, 0, 0 };
-	massInverse = realMass > 0.0f ? 1.f / realMass : 0.0f;
+
+	lifetime = config.lifetime;
+	age = 0.0;
+	alive = true;
 
 	createRenderItem();
 }
@@ -92,4 +100,19 @@ void Particle::calculateSimulatedValues() {
 void Particle::clearAccumulator() {
 	acceleration = 0;
 	force = 0;
+}
+
+void Particle::update(double t) {
+	if (age >= lifetime) {
+		alive = false;
+	}
+	else {
+		integrateEulerSemiImplicit(t);
+		age += t;
+	}
+}
+
+void Particle::changeColor(Vector4 c) {
+	color = c;
+	renderItem->changeColor(c);
 }

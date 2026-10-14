@@ -267,7 +267,7 @@
   <ItemGroup>
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="NormalDistribution.cpp" />
+    <ClCompile Include="Distributions.cpp" />
     <ClCompile Include="P0_Scene.cpp" />
     <ClCompile Include="P1_Scene.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -285,7 +285,7 @@
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="EmptyScene.h" />
-    <ClInclude Include="NormalDistribution.h" />
+    <ClInclude Include="Distributions.h" />
     <ClInclude Include="P0_Scene.h" />
     <ClInclude Include="P1_Scene.h" />
     <ClInclude Include="Particle.h" />

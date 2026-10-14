@@ -1,17 +1,48 @@
 #include "ParticleSystem.h"
-#include "Particle.h"
-#include "ParticleGenerator.h"
 
-ParticleSystem::ParticleSystem(Vector3D pos, Particle config) : _particleConfig(config) {
-	_particles.reserve(MAX_PARTICLES);
+ParticleSystem::ParticleSystem(Particle config) : _particleConfig(config), _generators(), _queuedParticles(), _particles() {
 }
 
-//void ParticleSystem::addGenerator(ParticleGenerator g) {
-//	//_gen = g;
-//}
+ParticleSystem::~ParticleSystem() {
+	for (auto p : _particles)
+		delete p;
+	for (auto g : _generators)
+		delete g;
+	for (auto q : _queuedParticles)
+		delete q;
 
-// SO! the way this is going to work. particle system can hold many generators
-// it updates those generators and passes dt
-// the generators generate particles and return them to the system, which stores them in a vector and upadtse them an decides their death time and stuff and takes care of the pooling
-// so there is going to be a general generator/emitter...
-// and either give it a type orrr do inheritance
+	_particles.clear();
+	_generators.clear();
+	_queuedParticles.clear();
+}
+
+void ParticleSystem::addGenerator(ParticleGenerator* g) {
+	_generators.push_back(g);
+}
+
+void ParticleSystem::update(double t) {
+	// add queued up particles to particle list
+	_particles.insert(_queuedParticles.end(), _particles.begin(), _particles.end());
+	_queuedParticles.clear();
+
+	// update generators, queue up particles to add next frame
+	for (auto g : _generators) {
+		if (g->isActive()) {
+			auto particles = g->updateGenerate(t);
+			_queuedParticles.insert(_particles.end(), particles.begin(), particles.end());
+		}
+	}
+
+	// update particles & remove if dead
+	for (auto p = _particles.begin(); p != _particles.end();) {
+		if ((*p)->alive) {
+			(*p)->update(t);
+		}
+		else {
+			p = _particles.erase(p);
+		}
+	}
+}
+
+// COULD DO THIS!
+// find first dead particle, and then pass that particle/index to the generator update and generate to use that particle?
