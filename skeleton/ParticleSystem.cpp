@@ -2,13 +2,13 @@
 #include "Particle.h"
 #include "ParticleGenerator.h"
 
-ParticleSystem::ParticleSystem(Vector3D pos, Particle config) : _particleConfig(config), _gen(ParticleGenerator::GeneratorShape::POINT, config) {
+ParticleSystem::ParticleSystem(Vector3D pos, Particle config) : _particleConfig(config) {
 	_particles.reserve(MAX_PARTICLES);
 }
 
-void ParticleSystem::setGenerator(ParticleGenerator g) {
-	//_gen = g;
-}
+//void ParticleSystem::addGenerator(ParticleGenerator g) {
+//	//_gen = g;
+//}
 
 // SO! the way this is going to work. particle system can hold many generators
 // it updates those generators and passes dt

@@ -12,5 +12,6 @@ bool ParticleGenerator::isActive() {
 }
 
 std::vector<Particle*> update(double dt) {
-
+	std::vector<Particle*> spawned;
+	return spawned;
 }

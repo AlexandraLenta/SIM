@@ -14,25 +14,60 @@ void P1_Scene::init() {
 	_items.push_back(new RenderItem(shape, &_transforms[0], Vector4(1, 1, 1, 1)));
 
 	createAxes();
-	p = new Particle(0.8, {1, 0, 0, 1});
-	p->position = { 1, 1, 0 };
-	p->velocity = { 0.5, 0.5, 0 };
-	p->acceleration = { 0, 0, 0 };
-	p->simulatedSpeed = 12;
-	p->realSpeed = 60;
-	p->realMass = 8;
-	p->realGravity = -9.81;
-	p->damping = 0.99;
-	p->color = { 1, 1, 1, 1 };
-	p->calculateSimulatedValues();
+	pPistol = new Particle(0.8, {1, 0, 0, 1});
+	pPistol->position = { 0, 4, 0 };
+	pPistol->velocity = { 0, 0, 1 };
+	pPistol->acceleration = { 0, -1, 0 };
+	pPistol->simulatedSpeed = 35;
+	pPistol->realSpeed = 250;
+	pPistol->realMass = 0.005;
+	pPistol->realGravity = -9.81;
+	pPistol->damping = 0.99;
+	pPistol->calculateSimulatedValues();
+	pPistol->simulatedGravity = -1;
 
-	//_projPool = new ProjectilePool(20);
+	pArtillery = new Particle(0.8, { 0, 1, 0, 1 });
+	pArtillery->position = { 0, 1, 0 };
+	pArtillery->velocity = { 0, 3, 4 };
+	pArtillery->acceleration = { 0, -20, 0 };
+	pArtillery->simulatedSpeed = 50;
+	pArtillery->realSpeed = 500;
+	pArtillery->realMass = 50;
+	pArtillery->realGravity = -9.81;
+	pArtillery->damping = 0.99;
+	pArtillery->calculateSimulatedValues();
+	pPistol->simulatedGravity = -20;
+
+	pFireball = new Particle(0.8, { 0, 0, 1, 1 });
+	pFireball->position = { 0, 2, 0 };
+	pFireball->velocity = { 0, 0, 1 };
+	pFireball->acceleration = { 0, 0.6, 0 };
+	pFireball->simulatedSpeed = 5;
+	pFireball->realSpeed = 100;
+	pFireball->realMass = 1;
+	pFireball->realGravity = 0;
+	pFireball->damping = 0.9;
+	pFireball->calculateSimulatedValues();
+	pPistol->simulatedGravity = 0.6;
+
+	pLaser = new Particle(0.8, { 0, 1, 1, 1 });
+	pLaser->position = { 0, 3, 0 };
+	pLaser->velocity = { 0, 0, 1 };
+	pLaser->acceleration = { 0, 0.6, 0 };
+	pLaser->simulatedSpeed = 100;
+	pLaser->realSpeed = 900;
+	pLaser->realMass = 0.001;
+	pLaser->realGravity = 0;
+	pLaser->damping = 0.99;
+	pLaser->calculateSimulatedValues();
+	pPistol->simulatedGravity = 0;
 }
 
 void P1_Scene::update(double dt) {
-	std::cout << p->position.p << '\n';
-	//_projPool->updatePool(dt);
-	p->integrateEulerSemiImplicit(dt);
+	pPistol->integrateEulerSemiImplicit(dt);
+	pArtillery->integrateEulerSemiImplicit(dt);
+	pFireball->integrateEulerSemiImplicit(dt);
+	pLaser->integrateEulerSemiImplicit(dt);
 }
 
 void P1_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
@@ -56,8 +91,14 @@ void P1_Scene::cleanup() {
 	}
 	_items.clear();
 
-	//delete _projPool;
-	//_projPool = nullptr;
+	delete pPistol;
+	pPistol = nullptr;
+	delete pArtillery;
+	pArtillery = nullptr;
+	delete pFireball;
+	pFireball = nullptr;
+	delete pLaser;
+	pLaser = nullptr;
 }
 
 void P1_Scene::createAxes() {

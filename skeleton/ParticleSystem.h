@@ -1,7 +1,7 @@
 #pragma once
 #include "Vector3D.h"
 #include <vector>
-#include "NormalDistribution.h"
+#include "ParticleGenerator.h"
 #include "Particle.h"
 
 // NOTES
@@ -172,10 +172,9 @@ public:
 
 	void update(double t);
 
-	void setGenerator(ParticleGenerator gen);
+	//void addGenerator(ParticleGenerator gen);
 
 private:
 	std::vector<Particle*> _particles;
-	ParticleGenerator _gen;
 	Particle _particleConfig;
 };

@@ -39,16 +39,19 @@ Particle::~Particle() {
 
 
 void Particle::integrateEuler(double t) {
+	if (massInverse <= 0.0f) return; // no integramos objetos con masa infinita
+
 	Vector3D finalA = acceleration + simulatedGravity + force * massInverse;
 	position.p = position.p + (velocity * t); // actualizar la posicion
 
 	velocity = (velocity + finalA * t) * pow(damping, t); // actualizar velocidad en base a aceleracion constante
 
-	acceleration = 0; // resetear la aceleracion despues del empuje
-	force = 0;
+	clearAccumulator();
 }
 
 void Particle::integrateEulerSemiImplicit(double t) {
+	if (massInverse <= 0.0f) return; // no integramos objetos con masa infinita
+
 	Vector3D finalA = acceleration + simulatedGravity + force * massInverse;
 
 	velocity = velocity.normalized() * simulatedSpeed;
@@ -57,11 +60,12 @@ void Particle::integrateEulerSemiImplicit(double t) {
 
 	position.p = position.p + (velocity * t); // actualizar la posicion
 
-	acceleration = 0; // resetear la aceleracion despues del empuje
-	force = 0;
+	clearAccumulator();
 }
 
 void Particle::integrateVerlet(double t) {
+	if (massInverse <= 0.0f) return; // no integramos objetos con masa infinita
+
 	Vector3D finalA = acceleration + simulatedGravity + force * massInverse;
 
 	physx::PxTransform tempPose = prevPosition;
@@ -69,7 +73,7 @@ void Particle::integrateVerlet(double t) {
 
 	position.p = 2 * prevPosition.p - tempPose.p + finalA * t * t;
 
-	acceleration = 0; // resetear la aceleracion despues del empuje
+	clearAccumulator();
 }
 
 void Particle::calculateSimulatedValues() {
@@ -81,4 +85,11 @@ void Particle::calculateSimulatedValues() {
 	simulatedMass = realMass * ((realSpeed / simulatedSpeed) * (realSpeed / simulatedSpeed));
 
 	simulatedGravity = realGravity * ((simulatedSpeed / realSpeed) * (simulatedSpeed / realSpeed));
+
+	massInverse = realMass > 0.0f ? 1.f / realMass : 0.0f;
+}
+
+void Particle::clearAccumulator() {
+	acceleration = 0;
+	force = 0;
 }

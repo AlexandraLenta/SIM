@@ -30,7 +30,11 @@ struct Particle {
 	void integrateVerlet(double t);
 
 	void calculateSimulatedValues();
+
+private:
 	void createRenderItem();
+
+	void clearAccumulator();
 
 	RenderItem* renderItem;
 };

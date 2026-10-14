@@ -23,8 +23,10 @@ public:
 private:
     std::deque<physx::PxTransform> _transforms;
     std::vector<RenderItem*> _items;
-    //ProjectilePool* _projPool;
-    Particle* p;
+    Particle* pPistol;
+    Particle* pArtillery;
+    Particle* pFireball;
+    Particle* pLaser;
 
     void createAxes();
 };
