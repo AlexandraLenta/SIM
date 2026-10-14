@@ -35,6 +35,10 @@ Particle* ParticleGenerator::spawn() {
 
 	p->position = physx::PxTransform(generateSpawnPosition());
 	p->velocity = generateVelocity();
+	p->radius = generateSize();
+
+	// missing... generate speed, generate... not sure what else, lifetime maybe
+	// set boundaries and calculate death upon leaving boundaries--maybe in particle system
 
 	p->calculateSimulatedValues();
 	return p;
@@ -97,10 +101,55 @@ Vector3D ParticleGenerator::generateSpawnPosition() {
 
 Vector3D ParticleGenerator::generateVelocity() {
 	switch (_config.spawnShape) {
+	
+		// particle moves in direction specified
 	case GeneratorShape::LINE:
 		return _config.meanVelocity;
+
 	case GeneratorShape::CONE:
-		return;
+
+		Vector3D axis = _config.meanVelocity.normalized();
+
+		float ejectionAngleRad = _config.ejectionAngle * std::numbers::pi_v<float> / 180.0f;
+
+		// random angle
+		float cosAngle = generateUniform(std::cos(_config.ejectionAngle), 1);
+		float sinAngle = std::sqrt(1 - cosAngle * cosAngle);
+
+		// random angle from central axis
+		float randomAngle = generateUniform(0, 2.f * std::numbers::pi_v<float>);
+
+		// we can use any axis as our helper, but the cross product of two parallel vectors is 0
+		// so we pick y, for example, as our helper, and use it if its not nearly parallel to the axis given
+		Vector3D helper = std::abs(axis.y()) > 0.999f ? Vector3D{1, 0, 0} : Vector3D{0, 1, 0};
+
+		// we create a coordinate system around our axis
+		// axis points straight down the cone
+		// tangent and bitangent are perpendicular to the axis, point sideways
+		Vector3D tangent = helper.cross(axis).normalized();
+		Vector3D bitangent = axis.cross(tangent).normalized();
+
+		// the formula would be
+		// z = cos(angle from center of cone) -- we can name it z axis
+		// x = cos(angle from x axis (tangent)) * sin(angle from center of cone)
+		// y = sin(angle from y axis (bitangent)) * sin(angle from center of cone)
+		// since bitangent, axis, and tangent all represent the x y z axes, we multiply by this coordinate system
+		Vector3D finalDir = axis * cosAngle + 
+			tangent * (sinAngle * std::cos(randomAngle)) + 
+			bitangent * (sinAngle * std::sin(randomAngle));
+
+		return finalDir;
+	}
+}
+
+float ParticleGenerator::generateSize() {
+	switch (_config.sizeType) {
+	case ParticleSizeType::FIXED:
+	default:
+		return _config.meanParticleRadius;
+
+	case ParticleSizeType::VARIABLE:
+		return generateNormal(_config.meanParticleRadius, _config.devParticleRadius);
 	}
 }
 
@@ -111,3 +160,4 @@ float ParticleGenerator::generateUniform(float min, float max) {
 float ParticleGenerator::generateNormal(float mean, float stddev) {
 	return _normalDist(_mt, std::normal_distribution<float>::param_type(mean, stddev));
 }
+

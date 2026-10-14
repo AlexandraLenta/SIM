@@ -24,6 +24,7 @@ enum class ParticleSizeType {
 struct ParticleGenConfig {
 	GeneratorOrigin originShape = GeneratorOrigin::POINT; // for position
 	GeneratorShape spawnShape = GeneratorShape::CONE; // for velocity
+	ParticleSizeType sizeType = ParticleSizeType::FIXED;
 	
 	Vector3D axis = { 1, 0, 0 }; // for GeneratorOrigin::LINE
 	float shapeRadius = 10; // for all GeneratorOrigin types
@@ -31,13 +32,14 @@ struct ParticleGenConfig {
 	Vector3D boxHalfExtents = { 10, 10, 10 }; // distance from origin to box face in the 3 axes (considering origin = 0)
 
 	Vector3D meanVelocity = { 0, -1, 0 }; // the mean velocity direction for all GeneratorShape types
-
+	float meanSpeed = 10; // mean speed of the particle
 
 	float ejectionAngle; // for GeneratorShape::CONE
 
 	Vector3D originPoint; // marks the origin point, center of box, center of sphere, or center of line to spawn around
 	
-	float meanParticleRadius; // the mean radius of the particle
+	float meanParticleRadius = 2; // the mean radius of the particle
+	float devParticleRadius = 0.5;
 };
 
 class ParticleGenerator {
@@ -70,6 +72,7 @@ private:
 
 	Vector3D generateSpawnPosition();
 	Vector3D generateVelocity();
+	float generateSize();
 
 	float generateUniform(float min, float max);
 	float generateNormal(float mean, float stddev);
