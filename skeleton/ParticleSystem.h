@@ -134,7 +134,7 @@ class ParticleSystem
 public:
 	static constexpr size_t MAX_PARTICLES = 100;
 
-	ParticleSystem(Particle config);
+	ParticleSystem();
 
 	~ParticleSystem();
 
@@ -146,5 +146,4 @@ private:
 	std::vector<Particle*> _particles;
 	std::vector<Particle*> _queuedParticles;
 	std::vector<ParticleGenerator*> _generators;
-	Particle _particleConfig;
 };

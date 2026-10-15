@@ -5,6 +5,8 @@
 struct Particle {
 	float radius;
 	Vector4 color;
+	Vector4 iniColor;
+	Vector4 finColor;
 
 	physx::PxTransform position;
 	physx::PxTransform prevPosition;
@@ -43,12 +45,19 @@ struct Particle {
 	void integrateVerlet(double t);
 
 	void calculateSimulatedValues();
+	void calculateInverseMass();
 
 	void changeColor(Vector4 c);
+	double lerp(double a, double b, double t);
+	Vector4 lerpColor(Vector4 a, Vector4 b, double t);
 
 private:
 
 	void clearAccumulator();
+	float rgb2linear(float s);
+	float linear2rgb(float linear);
+	Vector4 rgb2linear(Vector4 c);
+	Vector4 linear2rgb(Vector4 c);
 
 	RenderItem* renderItem;
 };

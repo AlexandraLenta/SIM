@@ -33,6 +33,11 @@ struct ParticleGenConfig {
 
 	Vector3D meanVelocity = { 0, -1, 0 }; // the mean velocity direction for all GeneratorShape types
 	float meanSpeed = 10; // mean speed of the particle
+	float devSpeed = 0.2;
+
+	float realToSimSpeedRatio = 10; // real speed is 10 times bigger than simulated speed
+
+	float meanLifetime = 10;
 
 	float ejectionAngle; // for GeneratorShape::CONE
 
@@ -40,6 +45,14 @@ struct ParticleGenConfig {
 	
 	float meanParticleRadius = 2; // the mean radius of the particle
 	float devParticleRadius = 0.5;
+
+	Vector4 color = { 1, 0, 0, 1 };
+	Vector4 finColor = { 1, 0, 0, 1 };
+
+	float realMass = 2;
+	float realGravity = 0;
+
+	float damping = 1;
 };
 
 class ParticleGenerator {
@@ -56,6 +69,8 @@ public:
 
 	void setActive(bool a);
 	bool isActive();
+
+	void setSpawnInterval(double t);
 
 private:
 	ParticleGenConfig _config;

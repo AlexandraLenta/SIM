@@ -13,6 +13,10 @@ bool ParticleGenerator::isActive() {
 	return _isActive;
 }
 
+void ParticleGenerator::setSpawnInterval(double t) {
+	_spawnInterval = t;
+}
+
 std::vector<Particle*> ParticleGenerator::updateGenerate(double dt) {
 	std::vector<Particle*> spawned = {};
 
@@ -34,13 +38,32 @@ Particle* ParticleGenerator::spawn() {
 	Particle* p = new Particle();
 
 	p->position = physx::PxTransform(generateSpawnPosition());
-	p->velocity = generateVelocity();
-	p->radius = generateSize();
 
-	// missing... generate speed, generate... not sure what else, lifetime maybe
-	// set boundaries and calculate death upon leaving boundaries--maybe in particle system
+	p->velocity = generateVelocity();
+	
+	p->radius = generateSize();
+	p->color = _config.color;
+	p->iniColor = _config.color;
+	p->finColor = _config.finColor;
+	
+	p->realSpeed = generateNormal(_config.meanSpeed * _config.realToSimSpeedRatio, _config.devSpeed * _config.realToSimSpeedRatio);
+	p->simulatedSpeed = generateNormal(_config.meanSpeed, _config.devSpeed);
+	
+	p->realMass = _config.realMass;
+
+	p->realGravity = _config.realGravity;
+
+	p->damping = _config.damping;
+	
+	p->age = 0.0;
+	p->alive = true;
+	p->lifetime = _config.meanLifetime;
+
 
 	p->calculateSimulatedValues();
+	p->calculateInverseMass();
+	p->createRenderItem();
+
 	return p;
 }
 
@@ -113,7 +136,7 @@ Vector3D ParticleGenerator::generateVelocity() {
 		float ejectionAngleRad = _config.ejectionAngle * std::numbers::pi_v<float> / 180.0f;
 
 		// random angle
-		float cosAngle = generateUniform(std::cos(_config.ejectionAngle), 1);
+		float cosAngle = generateUniform(std::cos(ejectionAngleRad), 1);
 		float sinAngle = std::sqrt(1 - cosAngle * cosAngle);
 
 		// random angle from central axis
@@ -138,7 +161,7 @@ Vector3D ParticleGenerator::generateVelocity() {
 			tangent * (sinAngle * std::cos(randomAngle)) + 
 			bitangent * (sinAngle * std::sin(randomAngle));
 
-		return finalDir;
+		return finalDir.normalized();
 	}
 }
 
@@ -160,4 +183,3 @@ float ParticleGenerator::generateUniform(float min, float max) {
 float ParticleGenerator::generateNormal(float mean, float stddev) {
 	return _normalDist(_mt, std::normal_distribution<float>::param_type(mean, stddev));
 }
-

@@ -5,9 +5,10 @@ Particle::Particle(float radius, Vector4 color) : radius(radius), color(color) {
 }
 
 Particle::Particle(Particle& config) {
-
 	radius = config.radius;
 	color = config.color;
+	iniColor = config.color;
+	finColor = config.finColor;
 
 	position = config.position;
 	prevPosition = config.prevPosition;
@@ -32,6 +33,10 @@ Particle::Particle(Particle& config) {
 	createRenderItem();
 }
 
+void Particle::calculateInverseMass() {
+	massInverse = realMass > 0.0f ? 1.f / realMass : 0.0f;
+}
+
 void Particle::createRenderItem() {
 	// crear la particula visualmente
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
@@ -44,7 +49,6 @@ Particle::~Particle() {
 		renderItem = nullptr;
 	}
 }
-
 
 void Particle::integrateEuler(double t) {
 	if (massInverse <= 0.0f) return; // no integramos objetos con masa infinita
@@ -66,6 +70,7 @@ void Particle::integrateEulerSemiImplicit(double t) {
 
 	velocity = (velocity + finalA * t) * pow(damping, t); // actualizar velocidad en base a aceleracion constante
 
+	
 	position.p = position.p + (velocity * t); // actualizar la posicion
 
 	clearAccumulator();
@@ -109,10 +114,68 @@ void Particle::update(double t) {
 	else {
 		integrateEulerSemiImplicit(t);
 		age += t;
+
+		if (iniColor != finColor) {
+			double dt = age / lifetime;
+			changeColor(lerpColor(iniColor, finColor, dt));
+		}
 	}
 }
 
 void Particle::changeColor(Vector4 c) {
 	color = c;
 	renderItem->changeColor(c);
+}
+
+double Particle::lerp(double a, double b, double t) {
+	if (t < 0.0 || t > 1.0) {
+		throw std::out_of_range("t must be between 0 and 1 for interpolation");
+	}
+	return a + t * (b - a);
+}
+
+Vector4 Particle::lerpColor(Vector4 a, Vector4 b, double t) {
+	if (t < 0.0) {
+		return iniColor;
+	}
+	else if (t > 1.0) {
+		return finColor;
+	}
+
+	Vector4 linearA = rgb2linear(a);
+	Vector4 linearB = rgb2linear(b);
+
+	Vector4 interpolated = linearA + (linearB - linearA) * t;
+
+	return linear2rgb(interpolated);
+}
+
+float Particle::rgb2linear(float s) {
+	return s <= 0.04045f
+		? s / 12.92f
+		: powf((s + 0.055f) / 1.055f, 2.4f);
+}
+
+float Particle::linear2rgb(float linear) {
+	return linear <= 0.0031308f
+		? linear * 12.92f
+		: 1.055f * powf(linear, 1.0f / 2.4f) - 0.055f;
+}
+
+Vector4 Particle::rgb2linear(Vector4 c) {
+	return {
+		rgb2linear(c.x),
+		rgb2linear(c.y),
+		rgb2linear(c.z),
+		c.w
+	};
+}
+
+Vector4 Particle::linear2rgb(Vector4 c) {
+	return {
+		linear2rgb(c.x),
+		linear2rgb(c.y),
+		linear2rgb(c.z),
+		c.w
+	};
 }
