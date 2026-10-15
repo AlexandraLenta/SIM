@@ -13,7 +13,8 @@ enum class GeneratorOrigin {
 
 enum class GeneratorShape {
 	LINE,
-	CONE
+	CONE,
+	RADIAL // TODO: implement radial 
 };
 
 enum class ParticleSizeType {

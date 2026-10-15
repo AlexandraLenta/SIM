@@ -12,38 +12,8 @@ void P2_Scene::init() {
 
 	_particleSystem = new ParticleSystem();
 
-	ParticleGenConfig config1 = {
-		GeneratorOrigin::POINT,
-		GeneratorShape::CONE,
-		ParticleSizeType::VARIABLE,
-	};
-	
-	config1.meanVelocity = { 0, 1, 0 };
-	config1.meanSpeed = 35;
-	config1.devSpeed = 0.2;
-
-	config1.realToSimSpeedRatio = 10; // real speed is 10x higher than sim speed
-
-	config1.meanLifetime = 8; // seconds
-
-	config1.ejectionAngle = 30; // in degrees
-
-	config1.originPoint = { 0,0,0 }; // spawn from center
-
-	config1.meanParticleRadius = 0.5;
-	config1.devParticleRadius = 0.1;
-	config1.color = { 0, 0, 1, 1 };
-	config1.finColor = { 1, 0, 0, 1 };
-
-	config1.realMass = 2;
-	config1.realGravity = 0; // no gravity
-
-	config1.damping = 0.99; // minimal damping
-
-	ParticleGenerator* gen1 = new ParticleGenerator(config1);
-
-	_particleSystem->addGenerator(gen1);
-
+	createFirstGen();
+	//createSecondGen();
 }
 
 void P2_Scene::cleanup() {
@@ -82,4 +52,75 @@ void P2_Scene::createAxes() {
 	_items.push_back(new RenderItem(shape, &_transforms[1], Vector4(1, 0, 0, 1)));
 	_items.push_back(new RenderItem(shape, &_transforms[2], Vector4(0, 1, 0, 1)));
 	_items.push_back(new RenderItem(shape, &_transforms[3], Vector4(0, 0, 1, 1)));
+}
+
+void P2_Scene::createFirstGen() {
+	ParticleGenConfig config1 = {
+		GeneratorOrigin::POINT,
+		GeneratorShape::CONE,
+		ParticleSizeType::VARIABLE,
+	};
+
+	config1.meanVelocity = { 0, 1, 0 };
+	config1.meanSpeed = 35;
+	config1.devSpeed = 0.2;
+
+	config1.realToSimSpeedRatio = 10; // real speed is 10x higher than sim speed
+
+	config1.meanLifetime = 8; // seconds
+
+	config1.ejectionAngle = 30; // in degrees
+
+	config1.originPoint = { 0,0,0 }; // spawn from center
+
+	config1.meanParticleRadius = 0.5;
+	config1.devParticleRadius = 0.1;
+	config1.color = { 0, 0, 1, 1 };
+	config1.finColor = { 1, 0, 0, 1 };
+
+	config1.realMass = 2;
+	config1.realGravity = 0; // no gravity
+
+	config1.damping = 0.99; // minimal damping
+
+	ParticleGenerator* gen1 = new ParticleGenerator(config1);
+
+	_particleSystem->addGenerator(gen1);
+
+}
+
+void P2_Scene::createSecondGen() {
+	ParticleGenConfig config2 = {
+		GeneratorOrigin::BOX,
+		GeneratorShape::LINE,
+		ParticleSizeType::FIXED,
+	};
+
+	config2.boxHalfExtents = { 10, 1, 10 }; // not that tall
+
+	config2.meanVelocity = { 0, -1, 0 }; // fall down like rain
+	config2.meanSpeed = 25;
+	config2.devSpeed = 0.2;
+
+	config2.realToSimSpeedRatio = 10; // real speed is 10x higher than sim speed
+
+	config2.meanLifetime = 10; // seconds
+
+	config2.originPoint = { 0, 50, 0 }; // higher up
+
+	config2.meanParticleRadius = 0.2;
+
+	config2.color = { 0, 0, 1, 1 };
+	config2.finColor = { 0, 1, 0, 1 };
+
+	config2.realMass = 1;
+	config2.realGravity = -9.81; // normal gravity
+
+	config2.damping = 0.9; // minimal damping
+
+	ParticleGenerator* gen2 = new ParticleGenerator(config2);
+	gen2->setSpawnInterval(0.4);
+
+	_particleSystem->addGenerator(gen2);
+
 }

@@ -26,4 +26,7 @@ private:
     ParticleSystem* _particleSystem;
 
     void createAxes();
+    void createFirstGen();
+    void createSecondGen();
+    void createThirdGen();
 };
