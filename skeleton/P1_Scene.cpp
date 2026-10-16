@@ -33,7 +33,7 @@ void P1_Scene::init() {
 	pArtillery->simulatedSpeed = 50;
 	pArtillery->realSpeed = 500;
 	pArtillery->realMass = 50;
-	pArtillery->realGravity = -9.81;
+	pArtillery->realGravity = -20;
 	pArtillery->damping = 0.99;
 	pArtillery->calculateSimulatedValues();
 	pPistol->simulatedGravity = -20;

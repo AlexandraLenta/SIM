@@ -12,8 +12,9 @@ void P2_Scene::init() {
 
 	_particleSystem = new ParticleSystem();
 
-	createFirstGen();
-	//createSecondGen();
+	//createFirstGen();
+	createSecondGen();
+	//createThirdGen();
 }
 
 void P2_Scene::cleanup() {
@@ -31,7 +32,8 @@ void P2_Scene::update(double dt) {
 }
 
 void P2_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
-
+	if (key == 'v' || key == 'V')
+		_particleSystem->burst(20, 0);
 }
 
 void P2_Scene::createAxes() {
@@ -62,14 +64,14 @@ void P2_Scene::createFirstGen() {
 	};
 
 	config1.meanVelocity = { 0, 1, 0 };
-	config1.meanSpeed = 35;
+	config1.meanSpeed = 20;
 	config1.devSpeed = 0.2;
 
-	config1.realToSimSpeedRatio = 10; // real speed is 10x higher than sim speed
+	config1.realToSimSpeedRatio = 1; // real speed is equal to sim speed
 
-	config1.meanLifetime = 8; // seconds
+	config1.meanLifetime = 5; // seconds
 
-	config1.ejectionAngle = 30; // in degrees
+	config1.ejectionAngle = 20; // in degrees
 
 	config1.originPoint = { 0,0,0 }; // spawn from center
 
@@ -79,7 +81,7 @@ void P2_Scene::createFirstGen() {
 	config1.finColor = { 1, 0, 0, 1 };
 
 	config1.realMass = 2;
-	config1.realGravity = 0; // no gravity
+	config1.realGravity = -20; 
 
 	config1.damping = 0.99; // minimal damping
 
@@ -108,7 +110,7 @@ void P2_Scene::createSecondGen() {
 
 	config2.originPoint = { 0, 50, 0 }; // higher up
 
-	config2.meanParticleRadius = 0.2;
+	config2.meanParticleRadius = 0.3;
 
 	config2.color = { 0, 0, 1, 1 };
 	config2.finColor = { 0, 1, 0, 1 };
@@ -119,8 +121,44 @@ void P2_Scene::createSecondGen() {
 	config2.damping = 0.9; // minimal damping
 
 	ParticleGenerator* gen2 = new ParticleGenerator(config2);
-	gen2->setSpawnInterval(0.4);
+	gen2->setSpawnInterval(0.2);
 
 	_particleSystem->addGenerator(gen2);
+
+}
+
+void P2_Scene::createThirdGen() {
+	ParticleGenConfig config3 = {
+		GeneratorOrigin::SURFACE_SPHERE,
+		GeneratorShape::RADIAL,
+		ParticleSizeType::FIXED,
+	};
+
+	config3.shapeRadius = 8;
+
+	config3.meanVelocity = { 0, -1, 0 }; // fall down like rain
+	config3.meanSpeed = 25;
+	config3.devSpeed = 0.2;
+
+	config3.realToSimSpeedRatio = 10; // real speed is 10x higher than sim speed
+
+	config3.meanLifetime = 5; // seconds
+
+	config3.originPoint = { 0, 0, 0 }; // higher up
+
+	config3.meanParticleRadius = 0.3;
+
+	config3.color = { 0, 0, 1, 1 };
+	config3.finColor = { 0, 0, 1, 1 };
+
+	config3.realMass = 1;
+	config3.realGravity = 0; // normal gravity
+
+	config3.damping = 0.9; // minimal damping
+
+	ParticleGenerator* gen3 = new ParticleGenerator(config3);
+	gen3->setSpawnInterval(0.7);
+
+	_particleSystem->addGenerator(gen3);
 
 }

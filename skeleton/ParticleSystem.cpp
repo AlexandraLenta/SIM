@@ -46,6 +46,11 @@ void ParticleSystem::update(double t) {
 	}
 }
 
+void ParticleSystem::burst(int n, int index) {
+	auto toInsert = _generators[index]->burst(n);
+	_queuedParticles.insert(_queuedParticles.end(), toInsert.begin(), toInsert.end());
+}
+
 // COULD DO THIS!
 // find first dead particle, and then pass that particle/index to the generator update and generate to use that particle?
 
