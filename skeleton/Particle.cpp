@@ -64,12 +64,11 @@ void Particle::integrateEuler(double t) {
 void Particle::integrateEulerSemiImplicit(double t) {
 	if (massInverse <= 0.0f) return; // no integramos objetos con masa infinita
 
-	Vector3D finalA = acceleration + simulatedGravity + force * massInverse;
+	Vector3D finalA = acceleration + Vector3D{ 0, simulatedGravity, 0 } + force * massInverse;
 
 	velocity = velocity.normalized() * simulatedSpeed;
 
 	velocity = (velocity + finalA * t) * pow(damping, t); // actualizar velocidad en base a aceleracion constante
-
 	
 	position.p = position.p + (velocity * t); // actualizar la posicion
 

@@ -18,7 +18,7 @@ void ParticleGenerator::setSpawnInterval(double t) {
 }
 
 std::vector<Particle*> ParticleGenerator::updateGenerate(double dt) {
-	std::vector<Particle*> spawned = {};
+	_toSpawn.clear();
 
 	if (_isActive) {
 		_timer += dt;
@@ -26,11 +26,20 @@ std::vector<Particle*> ParticleGenerator::updateGenerate(double dt) {
 		while (_timer >= _spawnInterval) {
 			_timer -= _spawnInterval;
 
-			spawned.push_back(spawn());
+			_toSpawn.push_back(spawn());
 		}
 	}
 
-	return spawned;
+	return _toSpawn;
+}
+
+std::vector<Particle*> ParticleGenerator::burst(int n) {
+	_toSpawn.clear();
+	for (int i = 0; i < n; i++) {
+		_toSpawn.push_back(spawn());
+	}
+
+	return _toSpawn;
 }
 
 Particle* ParticleGenerator::spawn() {
@@ -39,7 +48,7 @@ Particle* ParticleGenerator::spawn() {
 
 	p->position = physx::PxTransform(generateSpawnPosition());
 
-	p->velocity = generateVelocity();
+	p->velocity = generateVelocity(p->position.p);
 	
 	p->radius = generateSize();
 	p->color = _config.color;
@@ -122,15 +131,15 @@ Vector3D ParticleGenerator::generateSpawnPosition() {
 	return _config.originPoint;
 }
 
-Vector3D ParticleGenerator::generateVelocity() {
+Vector3D ParticleGenerator::generateVelocity(Vector3D pos) {
 	switch (_config.spawnShape) {
 	
 		// particle moves in direction specified
+	default:
 	case GeneratorShape::LINE:
-		return _config.meanVelocity;
+		return _config.meanVelocity.normalized();
 
-	case GeneratorShape::CONE:
-
+	case GeneratorShape::CONE: {
 		Vector3D axis = _config.meanVelocity.normalized();
 
 		float ejectionAngleRad = _config.ejectionAngle * std::numbers::pi_v<float> / 180.0f;
@@ -144,7 +153,7 @@ Vector3D ParticleGenerator::generateVelocity() {
 
 		// we can use any axis as our helper, but the cross product of two parallel vectors is 0
 		// so we pick y, for example, as our helper, and use it if its not nearly parallel to the axis given
-		Vector3D helper = std::abs(axis.y()) > 0.999f ? Vector3D{1, 0, 0} : Vector3D{0, 1, 0};
+		Vector3D helper = std::abs(axis.y()) > 0.999f ? Vector3D{ 1, 0, 0 } : Vector3D{ 0, 1, 0 };
 
 		// we create a coordinate system around our axis
 		// axis points straight down the cone
@@ -157,12 +166,23 @@ Vector3D ParticleGenerator::generateVelocity() {
 		// x = cos(angle from x axis (tangent)) * sin(angle from center of cone)
 		// y = sin(angle from y axis (bitangent)) * sin(angle from center of cone)
 		// since bitangent, axis, and tangent all represent the x y z axes, we multiply by this coordinate system
-		Vector3D finalDir = axis * cosAngle + 
-			tangent * (sinAngle * std::cos(randomAngle)) + 
+		Vector3D finalDir = axis * cosAngle +
+			tangent * (sinAngle * std::cos(randomAngle)) +
 			bitangent * (sinAngle * std::sin(randomAngle));
-
+	
 		return finalDir.normalized();
 	}
+	case GeneratorShape::RADIAL: {
+		if (_config.originShape == GeneratorOrigin::POINT) {
+
+		}
+		else {
+			Vector3D finalD = pos - _config.originPoint;
+			return finalD.normalized();
+		}
+	}
+	}
+	
 }
 
 float ParticleGenerator::generateSize() {

@@ -73,8 +73,11 @@ public:
 
 	void setSpawnInterval(double t);
 
+	std::vector<Particle*> burst(int n);
+
 private:
 	ParticleGenConfig _config;
+	std::vector<Particle*> _toSpawn;
 	
 	bool _isActive = true;
 
@@ -87,7 +90,7 @@ private:
 	std::mt19937 _mt;
 
 	Vector3D generateSpawnPosition();
-	Vector3D generateVelocity();
+	Vector3D generateVelocity(Vector3D pos);
 	float generateSize();
 
 	float generateUniform(float min, float max);

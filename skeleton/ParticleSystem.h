@@ -142,6 +142,8 @@ public:
 
 	void addGenerator(ParticleGenerator* g);
 
+	void burst(int n, int index);
+
 private:
 	std::vector<Particle*> _particles;
 	std::vector<Particle*> _queuedParticles;
