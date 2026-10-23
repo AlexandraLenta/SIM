@@ -29,7 +29,6 @@ std::vector<Particle*> ParticleGenerator::updateGenerate(double dt) {
 			_toSpawn.push_back(spawn());
 		}
 	}
-
 	return _toSpawn;
 }
 

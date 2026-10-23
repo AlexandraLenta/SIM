@@ -34,7 +34,7 @@ Particle::Particle(Particle& config) {
 }
 
 void Particle::calculateInverseMass() {
-	massInverse = realMass > 0.0f ? 1.f / realMass : 0.0f;
+	massInverse = simulatedMass > 0.0f ? 1.f / simulatedMass : 0.0f;
 }
 
 void Particle::createRenderItem() {
@@ -58,21 +58,19 @@ void Particle::integrateEuler(double t) {
 
 	velocity = (velocity + finalA * t) * pow(damping, t); // actualizar velocidad en base a aceleracion constante
 
-	clearAccumulator();
+	clearAccumulators();
 }
 
 void Particle::integrateEulerSemiImplicit(double t) {
 	if (massInverse <= 0.0f) return; // no integramos objetos con masa infinita
-
+	
 	Vector3D finalA = acceleration + Vector3D{ 0, simulatedGravity, 0 } + force * massInverse;
-
-	velocity = velocity.normalized() * simulatedSpeed;
 
 	velocity = (velocity + finalA * t) * pow(damping, t); // actualizar velocidad en base a aceleracion constante
 	
 	position.p = position.p + (velocity * t); // actualizar la posicion
 
-	clearAccumulator();
+	clearAccumulators();
 }
 
 void Particle::integrateVerlet(double t) {
@@ -85,7 +83,7 @@ void Particle::integrateVerlet(double t) {
 
 	position.p = 2 * prevPosition.p - tempPose.p + finalA * t * t;
 
-	clearAccumulator();
+	clearAccumulators();
 }
 
 void Particle::calculateSimulatedValues() {
@@ -98,12 +96,17 @@ void Particle::calculateSimulatedValues() {
 
 	simulatedGravity = realGravity * ((simulatedSpeed / realSpeed) * (simulatedSpeed / realSpeed));
 
-	massInverse = realMass > 0.0f ? 1.f / realMass : 0.0f;
+	massInverse = simulatedMass > 0.0f ? 1.f / simulatedMass : 0.0f;
 }
 
-void Particle::clearAccumulator() {
-	acceleration = 0;
+void Particle::clearAccumulators() {
 	force = 0;
+}
+
+
+void Particle::applyForce(Vector3D f) {
+	std::cout << "force applied: " << f << '\n';
+	force += f;
 }
 
 void Particle::update(double t) {

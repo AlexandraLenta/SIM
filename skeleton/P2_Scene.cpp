@@ -12,9 +12,9 @@ void P2_Scene::init() {
 
 	_particleSystem = new ParticleSystem();
 
-	//createFirstGen();
+	createFirstGen();
 	createSecondGen();
-	//createThirdGen();
+	createThirdGen();
 }
 
 void P2_Scene::cleanup() {
@@ -33,7 +33,7 @@ void P2_Scene::update(double dt) {
 
 void P2_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
 	if (key == 'v' || key == 'V')
-		_particleSystem->burst(20, 0);
+		_particleSystem->burst(20, 2);
 }
 
 void P2_Scene::createAxes() {
@@ -73,7 +73,7 @@ void P2_Scene::createFirstGen() {
 
 	config1.ejectionAngle = 20; // in degrees
 
-	config1.originPoint = { 0,0,0 }; // spawn from center
+	config1.originPoint = { -20,0,0 }; // spawn from center
 
 	config1.meanParticleRadius = 0.5;
 	config1.devParticleRadius = 0.1;
@@ -144,7 +144,7 @@ void P2_Scene::createThirdGen() {
 
 	config3.meanLifetime = 5; // seconds
 
-	config3.originPoint = { 0, 0, 0 }; // higher up
+	config3.originPoint = { 20, 0, 0 }; // higher up
 
 	config3.meanParticleRadius = 0.3;
 
@@ -157,7 +157,7 @@ void P2_Scene::createThirdGen() {
 	config3.damping = 0.9; // minimal damping
 
 	ParticleGenerator* gen3 = new ParticleGenerator(config3);
-	gen3->setSpawnInterval(0.7);
+	gen3->setSpawnInterval(0.4);
 
 	_particleSystem->addGenerator(gen3);
 

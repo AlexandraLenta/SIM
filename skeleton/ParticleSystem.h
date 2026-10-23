@@ -3,6 +3,7 @@
 #include <vector>
 #include "ParticleGenerator.h"
 #include "Particle.h"
+#include "ForceGenerator.h"
 
 // NOTES
 //for (int i = 0; i < toEmit; ++i) {
@@ -141,6 +142,7 @@ public:
 	void update(double t);
 
 	void addGenerator(ParticleGenerator* g);
+	void addForceGenerator(ForceGenerator* f);
 
 	void burst(int n, int index);
 
@@ -148,4 +150,9 @@ private:
 	std::vector<Particle*> _particles;
 	std::vector<Particle*> _queuedParticles;
 	std::vector<ParticleGenerator*> _generators;
+	std::vector<ForceGenerator*> _forceGenerators;
+
+	void updateParticleGenerators(double t);
+	void updateParticles(double t);
+	void applyForces(double t);
 };
