@@ -6,12 +6,6 @@ GravityGenerator::GravityGenerator(Vector3D gravity) : ForceGenerator(), _gravit
 
 }
 
-void GravityGenerator::applyForce(std::vector<Particle*> p, double t) {
-	for (auto particle : p) {
-		applyForceToParticle(particle, t);
-	}
-}
-
 void GravityGenerator::applyForceToParticle(Particle* p, double t) {
 	double s = p->simulatedSpeed / p->realSpeed;
 	

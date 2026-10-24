@@ -67,8 +67,6 @@ void P2_Scene::createFirstGen() {
 	config1.meanSpeed = 20;
 	config1.devSpeed = 0.2;
 
-	config1.realToSimSpeedRatio = 1; // real speed is equal to sim speed
-
 	config1.meanLifetime = 5; // seconds
 
 	config1.ejectionAngle = 20; // in degrees

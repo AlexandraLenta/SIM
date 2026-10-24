@@ -5,6 +5,7 @@
 #include <deque>
 #include "Particle.h"
 #include "GravityGenerator.h"
+#include "ParticleSystem.h"
 
 class P3_Scene :
     public Scene
@@ -22,11 +23,16 @@ public:
 private:
     std::deque<physx::PxTransform> _transforms;
     std::vector<RenderItem*> _items;
+    std::vector<ForceGenerator*> _generators;
 
-    Particle* _p1;
-    Particle* _p2;
-    GravityGenerator* _gen1;
-    GravityGenerator* _gen2;
+    ParticleSystem* _particleSys = nullptr;
+
+    Particle* _p1 = nullptr;
+    Particle* _p2 = nullptr;
+    GravityGenerator* _gen1 = nullptr;
+    GravityGenerator* _gen2 = nullptr;
 
     void createAxes();
+    void createParticleGen();
+    void createGravityTest();
 };

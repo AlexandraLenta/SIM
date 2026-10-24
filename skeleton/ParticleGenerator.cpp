@@ -47,7 +47,7 @@ Particle* ParticleGenerator::spawn() {
 
 	p->position = physx::PxTransform(generateSpawnPosition());
 
-	p->velocity = generateVelocity(p->position.p);
+	Vector3D dir = generateVelocity(p->position.p);
 	
 	p->radius = generateSize();
 	p->color = _config.color;
@@ -69,7 +69,9 @@ Particle* ParticleGenerator::spawn() {
 
 
 	p->calculateSimulatedValues();
-	p->calculateInverseMass();
+
+	p->velocity = dir * p->simulatedSpeed;
+
 	p->createRenderItem();
 
 	return p;

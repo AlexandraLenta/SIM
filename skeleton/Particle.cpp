@@ -30,6 +30,8 @@ Particle::Particle(Particle& config) {
 	age = 0.0;
 	alive = true;
 
+	std::cout << realGravity << '\n';
+
 	createRenderItem();
 }
 
@@ -105,7 +107,6 @@ void Particle::clearAccumulators() {
 
 
 void Particle::applyForce(Vector3D f) {
-	std::cout << "force applied: " << f << '\n';
 	force += f;
 }
 

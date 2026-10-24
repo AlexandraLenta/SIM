@@ -39,6 +39,10 @@ public:
 		return { _x / mag, _y / mag, _z / mag };
 	}
 
+	Vector3D abs() const {
+		return { std::abs(_x), std::abs(_y), std::abs(_z) };
+	}
+
 	float dot(const Vector3D& v) const {
 		return _x * v._x + _y * v._y + _z * v._z;
 	}

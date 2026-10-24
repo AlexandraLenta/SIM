@@ -9,8 +9,6 @@ public:
     GravityGenerator() = default;
     GravityGenerator(Vector3D gravity);
 
-    void applyForce(std::vector<Particle*> p, double t) override;
-
     void setGravity(Vector3D acc);
 
     Vector3D getGravity();
