@@ -8,11 +8,7 @@ void WindGenerator::applyForceToParticle(Particle* p, double t) {
 	if (isInsideVolume(p->position.p)) {
 		Vector3D diff = _velocity - p->velocity;
 
-		//std::cout << diff << '\n';
-
 		Vector3D forceToApply = diff * _k1 + diff * diff.magnitude() * _k2;
-
-		//std::cout << forceToApply << '\n';
 
 		p->applyForce(forceToApply);
 	}
@@ -27,4 +23,23 @@ bool WindGenerator::isInsideVolume(Vector3D pos) {
 	return pos.x() <= extentsPositive.x() && pos.x() >= extentsNegative.x()
 		&& pos.y() <= extentsPositive.y() && pos.y() >= extentsNegative.y()
 		&& pos.z() <= extentsPositive.z() && pos.z() >= extentsNegative.z();
+}
+
+TornadoGenerator::TornadoGenerator(float k, Vector3D centerPos, Vector3D volume) : WindGenerator({0, 0, 0}, centerPos, volume, k) {
+
+}
+
+void TornadoGenerator::applyForceToParticle(Particle* p, double t) {
+	Vector3D vel = Vector3D{
+		-(p->position.p.z - _center.z()),
+		50 - (p->position.p.y - _center.y()),
+		p->position.p.x - _center.x()
+	} * _k1;
+	if (isInsideVolume(p->position.p)) {
+		Vector3D diff = _velocity - p->velocity;
+
+		Vector3D forceToApply = diff * _k1 + diff * diff.magnitude() * _k2;
+
+		p->applyForce(forceToApply);
+	}
 }

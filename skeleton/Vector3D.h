@@ -30,6 +30,18 @@ public:
 		return _z;
 	}
 
+	void setX(float x) {
+		_x = x;
+	}
+
+	void setY(float y) {
+		_y = y;
+	}
+
+	void setZ(float z) {
+		_z = z;
+	}
+
 	float magnitude() const {
 		return sqrt(_x * _x + _y * _y + _z * _z);
 	}
