@@ -17,8 +17,9 @@ void P3_Scene::init() {
 	createParticleGen();
 	
 	WindGenerator* gen = new WindGenerator({ 100, 0, 0 }, { 0, 0, 0 }, { 10, 10, 10 }); // blow in +x, centered on origin, size 2 in each direction from center
+	TornadoGenerator* gen2 = new TornadoGenerator({ 0, 0, 0 }, { 50, 50, 50 }, 20, 10);
 
-	_particleSys->addForceGenerator(gen);
+	_particleSys->addForceGenerator(gen2);
 }
 
 void P3_Scene::createGravityTest() {

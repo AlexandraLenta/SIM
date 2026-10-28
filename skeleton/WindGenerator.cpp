@@ -16,7 +16,7 @@ void WindGenerator::applyForceToParticle(Particle* p, double t) {
 
 //𝐹𝑣⃗⃗⃗ = 𝑘1(𝑣 𝑣 − 𝑣) + 𝑘2‖𝑣 𝑣 − 𝑣 ‖(𝑣 𝑣 − 𝑣)
 
-bool WindGenerator::isInsideVolume(Vector3D pos) {
+bool WindGenerator::isInsideVolume(Vector3D pos) const {
 	Vector3D extentsPositive = _center + _extents;
 	Vector3D extentsNegative = _center - _extents;
 
@@ -25,18 +25,18 @@ bool WindGenerator::isInsideVolume(Vector3D pos) {
 		&& pos.z() <= extentsPositive.z() && pos.z() >= extentsNegative.z();
 }
 
-TornadoGenerator::TornadoGenerator(float k, Vector3D centerPos, Vector3D volume) : WindGenerator({0, 0, 0}, centerPos, volume, k) {
-
+TornadoGenerator::TornadoGenerator(Vector3D centerPos, Vector3D volume, float strength, float upStrength, float k1, float k2) : WindGenerator({ 0, 0, 0 }, centerPos, volume, k1, k2), _strength(strength), _upStrength(upStrength) {
 }
 
 void TornadoGenerator::applyForceToParticle(Particle* p, double t) {
-	Vector3D vel = Vector3D{
-		-(p->position.p.z - _center.z()),
-		50 - (p->position.p.y - _center.y()),
-		p->position.p.x - _center.x()
-	} * _k1;
 	if (isInsideVolume(p->position.p)) {
-		Vector3D diff = _velocity - p->velocity;
+		Vector3D vel = Vector3D {
+			-(p->position.p.z - _center.z()),
+			_upStrength - (p->position.p.y - _center.y()),
+			p->position.p.x - _center.x()
+		} * _strength;
+
+		Vector3D diff = vel - p->velocity;
 
 		Vector3D forceToApply = diff * _k1 + diff * diff.magnitude() * _k2;
 
