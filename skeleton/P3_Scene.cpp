@@ -19,7 +19,9 @@ void P3_Scene::init() {
 	WindGenerator* gen = new WindGenerator({ 100, 0, 0 }, { 0, 0, 0 }, { 10, 10, 10 }); // blow in +x, centered on origin, size 2 in each direction from center
 	TornadoGenerator* gen2 = new TornadoGenerator({ 0, 0, 0 }, { 50, 50, 50 }, 20, 10);
 
-	_particleSys->addForceGenerator(gen1);
+	_explosion = new ExplosionGenerator({ 0, 0, 0 }, 30, 0.2, 10000 );
+
+	_particleSys->addForceGenerator(_explosion);
 }
 
 void P3_Scene::createGravityTest() {
@@ -126,7 +128,9 @@ void P3_Scene::update(double dt) {
 }
 
 void P3_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
-	
+	if (key == 'f') {
+		_explosion->explode();
+	}
 }
 
 void P3_Scene::createAxes() {
