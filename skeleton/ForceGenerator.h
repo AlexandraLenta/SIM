@@ -6,7 +6,7 @@ class ForceGenerator
 public:
 	ForceGenerator() = default;
 
-	void virtual applyForce(std::vector<Particle*> p, double t);
+	void applyForce(std::vector<Particle*> p, double t);
 
 	void virtual applyForceToParticle(Particle* p, double t) = 0;
 };
