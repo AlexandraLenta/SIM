@@ -101,6 +101,9 @@ void renderCallback()
 	for (auto it = gRenderItems.begin(); it != gRenderItems.end(); ++it)
 	{
 		const RenderItem* obj = (*it);
+		
+		if (!obj->visible) continue;
+
 		auto objTransform = obj->transform;
 		if (!objTransform)
 		{

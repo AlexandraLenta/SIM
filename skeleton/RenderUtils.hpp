@@ -59,6 +59,7 @@ public:
 	const physx::PxTransform* transform;
 	const physx::PxRigidActor* actor;
 	Vector4 color;
+	bool visible = true;
 
 	unsigned references;
 };

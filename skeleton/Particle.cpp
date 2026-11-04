@@ -37,8 +37,11 @@ void Particle::init(Particle& config) {
 	
 	alive = true;
 
+
 	if (renderItem) renderItem->changeColor(color);   // reset the visual too
 	else createRenderItem();
+
+	renderItem->visible = true;
 }
 
 void Particle::calculateInverseMass() {
@@ -49,6 +52,7 @@ void Particle::createRenderItem() {
 	// crear la particula visualmente
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
 	renderItem = new RenderItem(shape, &position, color);
+	shape->release();
 }
 
 Particle::~Particle() {
@@ -119,6 +123,7 @@ void Particle::applyForce(Vector3D f) {
 void Particle::update(double t) {
 	if (age >= lifetime) {
 		alive = false;
+		renderItem->visible = false;
 	}
 	else {
 		integrateEulerSemiImplicit(t);
