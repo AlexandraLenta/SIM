@@ -2,41 +2,46 @@
 #include "Vector3D.h"
 #include "RenderUtils.hpp"
 
+struct BulletConfig;
+
 struct Particle {
-	float radius;
-	Vector4 color;
-	Vector4 iniColor;
-	Vector4 finColor;
-	Vector4 linearIni;
-	Vector4 linearFin;
+	float radius = 2;
+	Vector4 color = { 0, 0, 0, 1 };
+	Vector4 iniColor = { 0, 0, 0, 1 };
+	Vector4 finColor = { 0, 0, 0, 1 };
+	Vector4 linearIni = { 0, 0, 0, 1 };
+	Vector4 linearFin = { 0, 0, 0, 1 };
 
-	physx::PxTransform position;
-	physx::PxTransform prevPosition;
+	physx::PxTransform position = { 0, 0, 0 };
+	physx::PxTransform prevPosition = { 0, 0, 0 };
 
-	Vector3D velocity;
-	Vector3D acceleration;
+	Vector3D velocity = { 0, 0, 0 };
+	Vector3D acceleration = { 0, 0, 0 };
 	Vector3D force = { 0, 0, 0 };
 	
-	float realMass;
+	float realMass = 2;
 	float simulatedMass;
 	float massInverse;
 	
-	float realSpeed;
-	float simulatedSpeed;
+	float realSpeed = 20;
+	float simulatedSpeed = 2;
 	
-	float realGravity;
+	float realGravity = -9.8; 
 	float simulatedGravity;
 	
 	float damping = 1;
 
 	bool alive = true;
-	double lifetime;
+	double lifetime = 10;
 	double age = 0.0;
 
 	Particle() = default;
 	Particle(float radius, Vector4 color);
 	Particle(Particle& config);
 	~Particle();
+	
+	void init(Particle& config);
+	void init(BulletConfig& config);
 
 	void createRenderItem();
 
@@ -48,8 +53,8 @@ struct Particle {
 
 	void calculateSimulatedValues();
 	void calculateInverseMass();
-	void init(Particle& config);
 
+	
 	void applyForce(Vector3D force);
 
 	void changeColor(Vector4 c);

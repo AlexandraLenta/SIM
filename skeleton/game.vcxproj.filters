@@ -29,7 +29,7 @@
     <ClCompile Include="BuoyancyGenerator.cpp" />
     <ClCompile Include="ExplosionGenerator.cpp" />
     <ClCompile Include="Demo_Scene.cpp" />
-    <ClCompile Include="ShotGenerator.cpp" />
+    <ClCompile Include="GunManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -62,7 +62,7 @@
     <ClInclude Include="BuoyancyGenerator.h" />
     <ClInclude Include="ExplosionGenerator.h" />
     <ClInclude Include="Demo_Scene.h" />
-    <ClInclude Include="ShotGenerator.h" />
+    <ClInclude Include="GunManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

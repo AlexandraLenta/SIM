@@ -30,7 +30,7 @@ private:
 	std::vector<Particle*> _free;     // available for reuse
 
 	std::vector<std::unique_ptr<ParticleGenerator>> _generators;
-	std::vector<std::unique_ptr<ForceGenerator>>    _forceGenerators;
+	std::vector<std::unique_ptr<ForceGenerator>> _forceGenerators;
 
 	void updateGenerators(double t);
 	void updateParticles(double t);

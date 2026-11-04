@@ -1,8 +1,6 @@
 #include "SpringForceGenerator.h"
 
-SpringForceGenerator::SpringForceGenerator(double k, double restL, Particle* other) : ForceGenerator(), _k(k), _restingLength(restL), _otherParticle(other) {
-
-}
+SpringForceGenerator::SpringForceGenerator(double k, double restL, Particle* other) : ForceGenerator(), _k(k), _restingLength(restL), _otherParticle(other) {}
 
 void SpringForceGenerator::applyForceToParticle(Particle* p, double t) {
 	Vector3D relativePos = _otherParticle->position.p - p->position.p;

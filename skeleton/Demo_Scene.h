@@ -3,6 +3,8 @@
 #include "ParticleSystem.h"
 #include "RenderUtils.hpp"
 
+class GunManager;
+
 /// <summary>
 /// Scene created for the presentation of the game demo.
 /// Features:
@@ -28,5 +30,6 @@ private:
     //std::vector<RenderItem*> _items;
 
     std::pair<physx::PxTransform, RenderItem*> _gun;
-    ParticleSystem* _particleSys = nullptr;
+    GunManager* _gunManager = nullptr;
+    std::unique_ptr<ParticleSystem> _particleSys = nullptr;
 };

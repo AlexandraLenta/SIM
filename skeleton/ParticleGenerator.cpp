@@ -20,7 +20,7 @@ void ParticleGenerator::setSpawnInterval(double t) {
 int ParticleGenerator::update(double dt) {
 	_timer += dt;
 	int n = static_cast<int>(_timer / _spawnInterval);
-	_timer -= n * _spawnInterval;     // keep the remainder, don't reset to 0
+	_timer -= n * _spawnInterval;     // keep what's left, don't reset to 0
 	return n;
 }
 

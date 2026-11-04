@@ -1,4 +1,5 @@
 #include "Particle.h"
+#include "GunManager.h"
 
 Particle::Particle(float radius, Vector4 color) : radius(radius), color(color) {
 	createRenderItem();
@@ -37,6 +38,41 @@ void Particle::init(Particle& config) {
 	
 	alive = true;
 
+
+	if (renderItem) renderItem->changeColor(color);   // reset the visual too
+	else createRenderItem();
+
+	renderItem->visible = true;
+}
+
+void Particle::init(BulletConfig& config) {
+	radius = config.radius;
+	color = config.color;
+	iniColor = config.iniColor;
+	finColor = config.finColor;
+	linearIni = rgb2linear(iniColor);
+	linearFin = rgb2linear(finColor);
+
+	position = config.position;
+	prevPosition = config.position;
+
+	velocity = config.direction;
+	force = { 0, 0, 0 };
+
+	realMass = config.realMass;
+	massInverse = realMass > 0.0f ? 1.f / realMass : 0.0f;
+
+	realSpeed = config.realSpeed;
+	simulatedSpeed = config.simulatedSpeed;
+
+	realGravity = config.realGravity;
+
+	damping = config.damping;
+
+	lifetime = config.lifetime;
+	age = 0.0f;
+
+	calculateSimulatedValues();
 
 	if (renderItem) renderItem->changeColor(color);   // reset the visual too
 	else createRenderItem();
