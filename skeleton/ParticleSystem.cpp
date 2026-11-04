@@ -1,76 +1,91 @@
 #include "ParticleSystem.h"
 
-ParticleSystem::ParticleSystem() : _generators(), _queuedParticles(), _particles() {
+ParticleSystem::ParticleSystem() : _pool(MAX_PARTICLES) {
+	_active.reserve(MAX_PARTICLES);
+	_free.reserve(MAX_PARTICLES);
+
+	for (auto& p : _pool) {
+		p.alive = false;
+		_free.push_back(&p);
+	}
 }
 
 ParticleSystem::~ParticleSystem() {
-	for (auto p : _particles)
+	for (auto p : _active)
 		delete p;
-	for (auto g : _generators)
-		delete g;
-	for (auto q : _queuedParticles)
-		delete q;
-	for (auto f : _forceGenerators)
-		delete f;
-
-	_particles.clear();
-	_generators.clear();
-	_queuedParticles.clear();
-	_forceGenerators.clear();
 }
 
-void ParticleSystem::addGenerator(ParticleGenerator* g) {
-	_generators.push_back(g);
+ParticleGenerator* ParticleSystem::addGenerator(std::unique_ptr<ParticleGenerator> g) {
+	_generators.push_back(std::move(g));
+
+	return _generators.back().get();
 }
 
-void ParticleSystem::addForceGenerator(ForceGenerator* f) {
-	_forceGenerators.push_back(f);
+ForceGenerator* ParticleSystem::addForceGenerator(std::unique_ptr<ForceGenerator> f) {
+	_forceGenerators.push_back(std::move(f));
+
+	return _forceGenerators.back().get();
 }
 
-void ParticleSystem::update(double t) {
-	// add queued up particles to particle list
-	_particles.insert(_particles.end(), _queuedParticles.begin(), _queuedParticles.end());
-	_queuedParticles.clear();
+void ParticleSystem::emitFrom(ParticleGenerator& g, int n) {
+	for (int i = 0; i < n; ++i) {
+		Particle* p = spawn();
+		if (!p) return; // if the pool is full
+		
+		g.initParticle(*p);
+	}
+}
 
-	updateParticleGenerators(t);
-	applyForces(t);
-	updateParticles(t);
+Particle* ParticleSystem::spawn() {
+	if (_free.empty()) return nullptr; // no more free particles
+
+	Particle* p = _free.back();
+
+	_free.pop_back();
+
+	p->alive = true;
+	
+	_active.push_back(p); // move from free to active
+	
+	return p;
 }
 
 void ParticleSystem::burst(int n, int index) {
-	auto toInsert = _generators[index]->burst(n);
-	_queuedParticles.insert(_queuedParticles.end(), toInsert.begin(), toInsert.end());
+	if (index < _generators.size())
+		emitFrom(*_generators[index], n);
 }
 
-void ParticleSystem::updateParticleGenerators(double t) {
-	// update generators, queue up particles to add next frame
-	for (auto g : _generators) {
-		if (g->isActive()) {
-			auto particles = g->updateGenerate(t);
-			_queuedParticles.insert(_queuedParticles.end(), particles.begin(), particles.end());
-		}
+void ParticleSystem::update(double t) {
+	applyForces(t);
+	updateParticles(t);
+	updateGenerators(t); // IMPORTANT: keep last, so new particles are updated next frame (to get rid of _queuedParticles)
+}
+
+
+void ParticleSystem::applyForces(double t) {
+	for (auto& fg : _forceGenerators) {
+		fg->applyForce(_active, t);
 	}
 }
 
 void ParticleSystem::updateParticles(double t) {
-	// update particles & remove if dead
-	for (auto p = _particles.begin(); p != _particles.end();) {
-		if ((*p)->alive) {
-			(*p)->update(t);
-			p++;
+	for (int i = 0; i < _active.size();) {
+		Particle* p = _active[i];
+		p->update(t);
+
+		if (!p->alive) {
+			_free.push_back(p); // free up particle that just died
+			_active[i] = _active.back(); // replace the dead particle with an active one
+			_active.pop_back();
 		}
 		else {
-			delete* p;
-			p = _particles.erase(p);
+			i++; // only advance i if we haven't swapped anything
 		}
 	}
 }
 
-void ParticleSystem::applyForces(double t) {
-	for (auto fg : _forceGenerators) {
-		fg->applyForce(_particles, t);
-	}
+void ParticleSystem::updateGenerators(double t) {
+	for (auto& g : _generators)
+		if (g->isActive())
+			emitFrom(*g, g->update(t));
 }
-
-// COULD DO THIS!
-// find first dead particle, and then pass that particle/index to the generator update and generate to use that particle?

@@ -267,6 +267,7 @@
   <ItemGroup>
     <ClCompile Include="BuoyancyGenerator.cpp" />
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="Demo_Scene.cpp" />
     <ClCompile Include="ExplosionGenerator.cpp" />
     <ClCompile Include="ForceGenerator.cpp" />
     <ClCompile Include="GravityGenerator.cpp" />
@@ -286,6 +287,7 @@
     <ClCompile Include="Render\Render.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ShotGenerator.cpp" />
     <ClCompile Include="SpringForceGenerator.cpp" />
     <ClCompile Include="WindGenerator.cpp" />
   </ItemGroup>
@@ -293,6 +295,7 @@
     <ClInclude Include="BuoyancyGenerator.h" />
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="Demo_Scene.h" />
     <ClInclude Include="EmptyScene.h" />
     <ClInclude Include="Distributions.h" />
     <ClInclude Include="ExplosionGenerator.h" />
@@ -312,6 +315,7 @@
     <ClInclude Include="Render\Render.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ShotGenerator.h" />
     <ClInclude Include="SpringForceGenerator.h" />
     <ClInclude Include="Vector3D.h" />
     <ClInclude Include="WindGenerator.h" />

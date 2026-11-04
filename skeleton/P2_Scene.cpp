@@ -83,9 +83,9 @@ void P2_Scene::createFirstGen() {
 
 	config1.damping = 0.99; // minimal damping
 
-	ParticleGenerator* gen1 = new ParticleGenerator(config1);
+	std::unique_ptr<ParticleGenerator> gen1(new ParticleGenerator(config1));
 
-	_particleSystem->addGenerator(gen1);
+	_particleSystem->addGenerator(std::move(gen1));
 
 }
 
@@ -118,10 +118,10 @@ void P2_Scene::createSecondGen() {
 
 	config2.damping = 0.9; // minimal damping
 
-	ParticleGenerator* gen2 = new ParticleGenerator(config2);
+	std::unique_ptr<ParticleGenerator> gen2(new ParticleGenerator(config2));
 	gen2->setSpawnInterval(0.2);
 
-	_particleSystem->addGenerator(gen2);
+	_particleSystem->addGenerator(std::move(gen2));
 
 }
 
@@ -154,9 +154,9 @@ void P2_Scene::createThirdGen() {
 
 	config3.damping = 0.9; // minimal damping
 
-	ParticleGenerator* gen3 = new ParticleGenerator(config3);
+	std::unique_ptr<ParticleGenerator> gen3(new ParticleGenerator(config3));
 	gen3->setSpawnInterval(0.4);
 
-	_particleSystem->addGenerator(gen3);
+	_particleSystem->addGenerator(std::move(gen3));
 
 }

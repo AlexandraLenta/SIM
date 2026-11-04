@@ -17,64 +17,32 @@ void ParticleGenerator::setSpawnInterval(double t) {
 	_spawnInterval = t;
 }
 
-std::vector<Particle*> ParticleGenerator::updateGenerate(double dt) {
-	_toSpawn.clear();
-
-	if (_isActive) {
-		_timer += dt;
-
-		while (_timer >= _spawnInterval) {
-			_timer -= _spawnInterval;
-
-			_toSpawn.push_back(spawn());
-		}
-	}
-	return _toSpawn;
+int ParticleGenerator::update(double dt) {
+	_timer += dt;
+	int n = static_cast<int>(_timer / _spawnInterval);
+	_timer -= n * _spawnInterval;     // keep the remainder, don't reset to 0
+	return n;
 }
 
-std::vector<Particle*> ParticleGenerator::burst(int n) {
-	_toSpawn.clear();
-	for (int i = 0; i < n; i++) {
-		_toSpawn.push_back(spawn());
-	}
+void ParticleGenerator::initParticle(Particle& p) {
+	Particle p2;
+	p2.position.p = generateSpawnPosition();
+	p2.velocity = generateVelocity(p.position.p);
+	p2.radius = generateSize();
+	p2.lifetime = _config.meanLifetime;
+	p2.damping = _config.damping;
+	p2.color = _config.color;
+	p2.finColor = _config.finColor;
 
-	return _toSpawn;
-}
+	p2.realMass = _config.realMass;
+	p2.realGravity = _config.realGravity;
 
-Particle* ParticleGenerator::spawn() {
+	p2.realSpeed = generateNormal(_config.meanSpeed * _config.realToSimSpeedRatio, _config.devSpeed * _config.realToSimSpeedRatio);
+	p2.simulatedSpeed = generateNormal(_config.meanSpeed, _config.devSpeed);
 
-	Particle* p = new Particle();
+	p2.calculateSimulatedValues();
 
-	p->position = physx::PxTransform(generateSpawnPosition());
-
-	Vector3D dir = generateVelocity(p->position.p);
-	
-	p->radius = generateSize();
-	p->color = _config.color;
-	p->iniColor = _config.color;
-	p->finColor = _config.finColor;
-	
-	p->realSpeed = generateNormal(_config.meanSpeed * _config.realToSimSpeedRatio, _config.devSpeed * _config.realToSimSpeedRatio);
-	p->simulatedSpeed = generateNormal(_config.meanSpeed, _config.devSpeed);
-	
-	p->realMass = _config.realMass;
-
-	p->realGravity = _config.realGravity;
-
-	p->damping = _config.damping;
-	
-	p->age = 0.0;
-	p->alive = true;
-	p->lifetime = _config.meanLifetime;
-
-
-	p->calculateSimulatedValues();
-
-	p->velocity = dir * p->simulatedSpeed;
-
-	p->createRenderItem();
-
-	return p;
+	p.init(p2);
 }
 
 Vector3D ParticleGenerator::generateSpawnPosition() {

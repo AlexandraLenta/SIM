@@ -5,6 +5,10 @@ Particle::Particle(float radius, Vector4 color) : radius(radius), color(color) {
 }
 
 Particle::Particle(Particle& config) {
+	init(config);
+}
+
+void Particle::init(Particle& config) {
 	radius = config.radius;
 	color = config.color;
 	iniColor = config.color;
@@ -14,23 +18,21 @@ Particle::Particle(Particle& config) {
 	prevPosition = config.prevPosition;
 
 	velocity = config.velocity;
-	acceleration = config.acceleration; 
+	acceleration = config.acceleration;
 	force = { 0, 0, 0 };
 
 	realMass = config.realMass;
 	simulatedMass = config.simulatedMass;
 	massInverse = realMass > 0.0f ? 1.f / realMass : 0.0f;
-	
+
 	realGravity = config.realGravity;
 	simulatedGravity = config.simulatedGravity;
-	
+
 	damping = config.damping;
 
 	lifetime = config.lifetime;
 	age = 0.0;
 	alive = true;
-
-	std::cout << realGravity << '\n';
 
 	createRenderItem();
 }

@@ -16,18 +16,25 @@ public:
 
 	void update(double t);
 
-	void addGenerator(ParticleGenerator* g);
-	void addForceGenerator(ForceGenerator* f);
+	ParticleGenerator* addGenerator(std::unique_ptr<ParticleGenerator> g);
+	ForceGenerator* addForceGenerator(std::unique_ptr<ForceGenerator> f);
 
 	void burst(int n, int index);
 
-private:
-	std::vector<Particle*> _particles;
-	std::vector<Particle*> _queuedParticles;
-	std::vector<ParticleGenerator*> _generators;
-	std::vector<ForceGenerator*> _forceGenerators;
+	// Return out a pooled particle ( + mark it as alive), or nullptr if the pool is full.
+	Particle* spawn();
 
-	void updateParticleGenerators(double t);
+private:
+	std::vector<Particle>  _pool;     // fixed size
+	std::vector<Particle*> _active;   // currently alive
+	std::vector<Particle*> _free;     // available for reuse
+
+	std::vector<std::unique_ptr<ParticleGenerator>> _generators;
+	std::vector<std::unique_ptr<ForceGenerator>>    _forceGenerators;
+
+	void updateGenerators(double t);
 	void updateParticles(double t);
 	void applyForces(double t);
+
+	void emitFrom(ParticleGenerator& g, int n);
 };

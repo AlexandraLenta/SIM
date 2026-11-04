@@ -16,12 +16,10 @@ void P3_Scene::init() {
 	
 	createParticleGen();
 	
-	WindGenerator* gen = new WindGenerator({ 100, 0, 0 }, { 0, 0, 0 }, { 10, 10, 10 }); // blow in +x, centered on origin, size 2 in each direction from center
-	TornadoGenerator* gen2 = new TornadoGenerator({ 0, 0, 0 }, { 50, 50, 50 }, 20, 10);
+	//WindGenerator* gen = new WindGenerator({ 100, 0, 0 }, { 0, 0, 0 }, { 10, 10, 10 }); // blow in +x, centered on origin, size 2 in each direction from center
+	//TornadoGenerator* gen2 = new TornadoGenerator({ 0, 0, 0 }, { 50, 50, 50 }, 20, 10);
 
-	_explosion = new ExplosionGenerator({ 0, 0, 0 }, 30, 0.2, 10000 );
-
-	_particleSys->addForceGenerator(_explosion);
+	_explosion = static_cast<ExplosionGenerator*>(_particleSys->addForceGenerator(std::move(std::unique_ptr<ExplosionGenerator>(new ExplosionGenerator({ 0, 0, 0 }, 30, 0.2, 10000)))));
 }
 
 void P3_Scene::createGravityTest() {
@@ -82,9 +80,9 @@ void P3_Scene::createParticleGen() {
 
 	config1.damping = 0.99; // minimal damping
 
-	ParticleGenerator* gen1 = new ParticleGenerator(config1);
+	std::unique_ptr<ParticleGenerator> gen1(new ParticleGenerator(config1));
 
-	_particleSys->addGenerator(gen1);
+	_particleSys->addGenerator(std::move(gen1));
 
 }
 

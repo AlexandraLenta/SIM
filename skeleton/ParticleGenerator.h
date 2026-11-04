@@ -40,9 +40,9 @@ struct ParticleGenConfig {
 
 	float meanLifetime = 10;
 
-	float ejectionAngle; // for GeneratorShape::CONE
+	float ejectionAngle = 30; // for GeneratorShape::CONE
 
-	Vector3D originPoint; // marks the origin point, center of box, center of sphere, or center of line to spawn around
+	Vector3D originPoint = { 0, 0, 0 }; // marks the origin point, center of box, center of sphere, or center of line to spawn around
 	
 	float meanParticleRadius = 2; // the mean radius of the particle
 	float devParticleRadius = 0.5;
@@ -58,26 +58,20 @@ struct ParticleGenConfig {
 
 class ParticleGenerator {
 public:
-	
-
-	ParticleGenerator(ParticleGenConfig config);
-
-	// update timer & generate particles if necessary
-	std::vector<Particle*> updateGenerate(double dt);
-
-	// spawn particle, each generator with its own configurations
-	Particle* spawn();
+	explicit ParticleGenerator(ParticleGenConfig config);
 
 	void setActive(bool a);
 	bool isActive();
-
 	void setSpawnInterval(double t);
 
-	std::vector<Particle*> burst(int n);
+	// counts ticks & returns the number of particles to generate this frame
+	int update(double dt);
+
+	// initialize pooled particle from the config given
+	void initParticle(Particle& p);
 
 private:
 	ParticleGenConfig _config;
-	std::vector<Particle*> _toSpawn;
 	
 	bool _isActive = true;
 
@@ -87,7 +81,7 @@ private:
 
 	std::uniform_real_distribution<float> _uniformDist{ -1, 1 };
 	std::normal_distribution<float> _normalDist{ 0, 1 };
-	std::mt19937 _mt;
+	std::mt19937 _mt{ std::random_device{}() };
 
 	Vector3D generateSpawnPosition();
 	Vector3D generateVelocity(Vector3D pos);

@@ -46,7 +46,7 @@ struct Particle {
 
 	void calculateSimulatedValues();
 	void calculateInverseMass();
-	void init();
+	void init(Particle& config);
 
 	void applyForce(Vector3D force);
 
@@ -63,5 +63,5 @@ private:
 	Vector4 rgb2linear(Vector4 c);
 	Vector4 linear2rgb(Vector4 c);
 
-	RenderItem* renderItem;
+	RenderItem* renderItem = nullptr;
 };
