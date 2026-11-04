@@ -7,6 +7,8 @@ struct Particle {
 	Vector4 color;
 	Vector4 iniColor;
 	Vector4 finColor;
+	Vector4 linearIni;
+	Vector4 linearFin;
 
 	physx::PxTransform position;
 	physx::PxTransform prevPosition;

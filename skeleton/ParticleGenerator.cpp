@@ -26,12 +26,12 @@ int ParticleGenerator::update(double dt) {
 
 void ParticleGenerator::initParticle(Particle& p) {
 	Particle p2;
-	p2.position.p = generateSpawnPosition();
-	p2.velocity = generateVelocity(p.position.p);
+	p2.position = physx::PxTransform(generateSpawnPosition());
+	Vector3D dir = generateVelocity(p.position.p);
 	p2.radius = generateSize();
 	p2.lifetime = _config.meanLifetime;
 	p2.damping = _config.damping;
-	p2.color = _config.color;
+	p2.iniColor = _config.color;
 	p2.finColor = _config.finColor;
 
 	p2.realMass = _config.realMass;
@@ -40,8 +40,10 @@ void ParticleGenerator::initParticle(Particle& p) {
 	p2.realSpeed = generateNormal(_config.meanSpeed * _config.realToSimSpeedRatio, _config.devSpeed * _config.realToSimSpeedRatio);
 	p2.simulatedSpeed = generateNormal(_config.meanSpeed, _config.devSpeed);
 
-	p2.calculateSimulatedValues();
+	p2.velocity = dir * p2.simulatedSpeed;
 
+	p2.calculateSimulatedValues();
+	
 	p.init(p2);
 }
 

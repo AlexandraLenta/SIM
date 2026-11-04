@@ -61,7 +61,6 @@ void ParticleSystem::update(double t) {
 	updateGenerators(t); // IMPORTANT: keep last, so new particles are updated next frame (to get rid of _queuedParticles)
 }
 
-
 void ParticleSystem::applyForces(double t) {
 	for (auto& fg : _forceGenerators) {
 		fg->applyForce(_active, t);

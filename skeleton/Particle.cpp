@@ -10,9 +10,11 @@ Particle::Particle(Particle& config) {
 
 void Particle::init(Particle& config) {
 	radius = config.radius;
-	color = config.color;
-	iniColor = config.color;
+	color = config.iniColor;
+	iniColor = config.iniColor;
+	linearIni = rgb2linear(iniColor);
 	finColor = config.finColor;
+	linearFin = rgb2linear(finColor);
 
 	position = config.position;
 	prevPosition = config.prevPosition;
@@ -32,9 +34,11 @@ void Particle::init(Particle& config) {
 
 	lifetime = config.lifetime;
 	age = 0.0;
+	
 	alive = true;
 
-	createRenderItem();
+	if (renderItem) renderItem->changeColor(color);   // reset the visual too
+	else createRenderItem();
 }
 
 void Particle::calculateInverseMass() {
@@ -71,7 +75,7 @@ void Particle::integrateEulerSemiImplicit(double t) {
 	Vector3D finalA = acceleration + Vector3D{ 0, simulatedGravity, 0 } + force * massInverse;
 
 	velocity = (velocity + finalA * t) * pow(damping, t); // actualizar velocidad en base a aceleracion constante
-	
+
 	position.p = position.p + (velocity * t); // actualizar la posicion
 
 	clearAccumulators();
@@ -122,7 +126,7 @@ void Particle::update(double t) {
 
 		if (iniColor != finColor) {
 			double dt = age / lifetime;
-			changeColor(lerpColor(iniColor, finColor, dt));
+			changeColor(lerpColor(linearIni, linearFin, dt));
 		}
 	}
 }
@@ -141,16 +145,13 @@ double Particle::lerp(double a, double b, double t) {
 
 Vector4 Particle::lerpColor(Vector4 a, Vector4 b, double t) {
 	if (t < 0.0) {
-		return iniColor;
+		return linear2rgb(a);
 	}
 	else if (t > 1.0) {
-		return finColor;
+		return linear2rgb(b);
 	}
 
-	Vector4 linearA = rgb2linear(a);
-	Vector4 linearB = rgb2linear(b);
-
-	Vector4 interpolated = linearA + (linearB - linearA) * t;
+	Vector4 interpolated = a + (b - a) * t;
 
 	return linear2rgb(interpolated);
 }
