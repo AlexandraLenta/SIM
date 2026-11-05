@@ -1,5 +1,5 @@
 JUEGO:
-
+El juego se halla en la escena Demo_Scene. Por ahora solo se puede mover donde apunta la pistola con el ratón y disparar con la tecla "x".
 
 REQUISITOS:
 

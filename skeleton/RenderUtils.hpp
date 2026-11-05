@@ -69,4 +69,6 @@ Camera* GetCamera();
 
 physx::PxShape* CreateShape(const physx::PxGeometry& geo, const physx::PxMaterial* mat = nullptr);
 
+bool GetMouseRay(physx::PxVec3& origin, physx::PxVec3& dir);
+
 #endif

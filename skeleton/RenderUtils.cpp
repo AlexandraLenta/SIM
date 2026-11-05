@@ -43,9 +43,13 @@ double GetCounter()
 	return t;
 }
 
+
+
 namespace
 {
 	Camera*	sCamera;
+	int sMouseX;
+	int sMouseY;
 
 void motionCallback(int x, int y)
 {
@@ -64,6 +68,12 @@ void keyboardCallback(unsigned char key, int x, int y)
 void mouseCallback(int button, int state, int x, int y)
 {
 	sCamera->handleMouse(button, state, x, y);
+}
+
+void passiveMouseCallback(int x, int y) {
+	sMouseX = x;
+	sMouseY = y;
+	sCamera->handlePassiveMouse(x, y);
 }
 
 void idleCallback()
@@ -149,6 +159,7 @@ void renderLoop()
 	glutDisplayFunc(renderCallback);
 	glutKeyboardFunc(keyboardCallback);
 	glutMouseFunc(mouseCallback);
+	glutPassiveMotionFunc(passiveMouseCallback);
 	glutMotionFunc(motionCallback);
 	motionCallback(0,0);
 
@@ -187,4 +198,24 @@ PxShape* CreateShape(const PxGeometry& geo, const PxMaterial* mat)
 
 	PxShape* shape = gPhysics->createShape(geo, *mat);
 	return shape;
+}
+
+bool GetMouseRay(PxVec3& origin, PxVec3& dir)
+{
+	GLdouble model[16], proj[16];
+	GLint view[4];
+	glGetDoublev(GL_MODELVIEW_MATRIX, model);
+	glGetDoublev(GL_PROJECTION_MATRIX, proj);
+	glGetIntegerv(GL_VIEWPORT, view);
+
+	GLdouble x = sMouseX;
+	GLdouble y = view[3] - sMouseY - 1;   // GLUT's y is top-down, GL's is bottom-up
+
+	GLdouble nx, ny, nz, fx, fy, fz;
+	if (gluUnProject(x, y, 0.0, model, proj, view, &nx, &ny, &nz) == GL_FALSE) return false;
+	if (gluUnProject(x, y, 1.0, model, proj, view, &fx, &fy, &fz) == GL_FALSE) return false;
+
+	origin = PxVec3((float)nx, (float)ny, (float)nz);
+	dir = (PxVec3((float)fx, (float)fy, (float)fz) - origin).getNormalized();
+	return true;
 }

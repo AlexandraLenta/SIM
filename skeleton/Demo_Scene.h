@@ -26,10 +26,8 @@ public:
     void cleanup() override;
 
 private:
-    //std::deque<physx::PxTransform> _transforms;
-    //std::vector<RenderItem*> _items;
+    physx::PxQuat rotationFromTo(const physx::PxVec3& from, const physx::PxVec3& to);
 
-    std::pair<physx::PxTransform, RenderItem*> _gun;
     GunManager* _gunManager = nullptr;
     std::unique_ptr<ParticleSystem> _particleSys = nullptr;
 };

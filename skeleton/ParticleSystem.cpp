@@ -11,8 +11,6 @@ ParticleSystem::ParticleSystem() : _pool(MAX_PARTICLES) {
 }
 
 ParticleSystem::~ParticleSystem() {
-	for (auto p : _active)
-		delete p;
 }
 
 ParticleGenerator* ParticleSystem::addGenerator(std::unique_ptr<ParticleGenerator> g) {

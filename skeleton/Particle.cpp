@@ -59,7 +59,6 @@ void Particle::init(BulletConfig& config) {
 	position = config.position;
 	prevPosition = config.position;
 
-	velocity = config.direction;
 	force = { 0, 0, 0 };
 
 	realMass = config.realMass;
@@ -67,6 +66,8 @@ void Particle::init(BulletConfig& config) {
 
 	realSpeed = config.realSpeed;
 	simulatedSpeed = config.simulatedSpeed;
+
+	velocity = config.direction.normalized() * simulatedSpeed;
 
 	realGravity = config.realGravity;
 

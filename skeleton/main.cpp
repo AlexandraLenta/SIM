@@ -33,7 +33,7 @@
 #define PVD_HOST "127.0.0.1" // IP localhost for PVD connection
 
 
-std::string display_text = "This is a test";
+std::string display_text = "";
 
 
 using namespace physx;
@@ -101,10 +101,10 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 	// Registrar las prácticas/escenas del curso
-	SceneManager::instance().registerScene<Demo_Scene>("P3");
+	SceneManager::instance().registerScene<Demo_Scene>("Demo");
 	
 	// Cargar la escena inicial
-	SceneManager::instance().changeScene("P3");
+	SceneManager::instance().changeScene("Demo");
 	
 }
 
