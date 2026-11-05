@@ -61,7 +61,7 @@ struct Particle {
 	double lerp(double a, double b, double t);
 	Vector4 lerpColor(Vector4 a, Vector4 b, double t);
 
-private:
+protected:
 
 	void clearAccumulators();
 

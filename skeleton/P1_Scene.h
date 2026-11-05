@@ -2,8 +2,7 @@
 #include "Scene.h"
 #include <vector>
 #include <queue>
-#include "Particle.h"
-
+#include "ProjectilePool.h"
 class RenderItem;
 class Vector3D;
 
@@ -23,10 +22,14 @@ public:
 private:
     std::deque<physx::PxTransform> _transforms;
     std::vector<RenderItem*> _items;
-    Particle* pPistol;
-    Particle* pArtillery;
-    Particle* pFireball;
-    Particle* pLaser;
+    Projectile* pPistol = nullptr;
+    Projectile* pArtillery = nullptr;
+    Projectile* pFireball = nullptr;
+    Projectile* pLaser = nullptr;
+    Projectile* _selected = nullptr;
+    std::vector<Projectile*> _shots;
+    ProjectilePool* _projPool;
+    ProjectilePool::ProjectileType _projType;
 
     void createAxes();
 };
