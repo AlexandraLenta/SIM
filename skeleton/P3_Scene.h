@@ -7,6 +7,7 @@
 #include "GravityGenerator.h"
 #include "ParticleSystem.h"
 #include "ExplosionGenerator.h"
+#include "WindGenerator.h"
 
 class P3_Scene :
     public Scene
@@ -34,6 +35,8 @@ private:
     GravityGenerator* _gen1 = nullptr;
     GravityGenerator* _gen2 = nullptr;
 
+    WindGenerator* _windGen = nullptr;
+    TornadoGenerator* _tornadoGen = nullptr;
     ExplosionGenerator* _explosion = nullptr;
 
     void createAxes();

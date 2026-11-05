@@ -1,7 +1,4 @@
 #include "P3_Scene.h"
-#include "Particle.h"
-#include "GravityGenerator.h"
-#include "WindGenerator.h"
 
 P3_Scene::P3_Scene(std::string name) : Scene(std::move(name)) {}
 
@@ -16,9 +13,8 @@ void P3_Scene::init() {
 	
 	createParticleGen();
 	
-	//WindGenerator* gen = new WindGenerator({ 100, 0, 0 }, { 0, 0, 0 }, { 10, 10, 10 }); // blow in +x, centered on origin, size 2 in each direction from center
-	//TornadoGenerator* gen2 = new TornadoGenerator({ 0, 0, 0 }, { 50, 50, 50 }, 20, 10);
-
+	_windGen = static_cast<WindGenerator*>(_particleSys->addForceGenerator(std::move(std::unique_ptr<WindGenerator>(new WindGenerator({ 100, 0, 0 }, { 0, 0, 0 }, { 20, 20, 20 }, 1))))); // blow in +x, centered on origin, size 2 in each direction from center
+	_tornadoGen = static_cast<TornadoGenerator*>(_particleSys->addForceGenerator(std::move(std::unique_ptr< TornadoGenerator>(new TornadoGenerator({ 0, 0, 0 }, { 50, 50, 50 }, 20, 10)))));
 	_explosion = static_cast<ExplosionGenerator*>(_particleSys->addForceGenerator(std::move(std::unique_ptr<ExplosionGenerator>(new ExplosionGenerator({ 0, 0, 0 }, 30, 0.2, 10000)))));
 }
 
@@ -128,6 +124,12 @@ void P3_Scene::update(double dt) {
 void P3_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
 	if (key == 'f') {
 		_explosion->explode();
+	}
+	if (key == 't' || key == 'T') {
+		_tornadoGen->setActive(!_tornadoGen->getActive());
+	}
+	if (key == 'e' || key == 'E') {
+		_windGen->setActive(!_windGen->getActive());
 	}
 }
 

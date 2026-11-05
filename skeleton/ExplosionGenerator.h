@@ -17,6 +17,5 @@ private:
     float _timeConstant;
     float _intensity;
     double _timeSinceExplosion;
-    bool _active;
     float _explosionVel;
 };
