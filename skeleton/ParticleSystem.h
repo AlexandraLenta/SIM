@@ -8,7 +8,7 @@
 class ParticleSystem
 {
 public:
-	static constexpr size_t MAX_PARTICLES = 100;
+	static constexpr size_t MAX_PARTICLES = 1000;
 
 	ParticleSystem();
 

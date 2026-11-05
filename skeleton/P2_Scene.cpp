@@ -4,16 +4,16 @@
 P2_Scene::P2_Scene(std::string name) : Scene(std::move(name)) {}
 
 void P2_Scene::init() {
-	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(1.0f));
+	//physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(1.0f));
 
-	_transforms.push_back(physx::PxTransform(Vector3D(0, 0, 0)));
-	_items.push_back(new RenderItem(shape, &_transforms[0], Vector4(1, 1, 1, 1)));
-	createAxes();
+	//_transforms.push_back(physx::PxTransform(Vector3D(0, 0, 0)));
+	//_items.push_back(new RenderItem(shape, &_transforms[0], Vector4(1, 1, 1, 1)));
+	//createAxes();
 
 	_particleSystem = new ParticleSystem();
 
-	createFirstGen();
-	createSecondGen();
+	//createFirstGen();
+	//createSecondGen();
 	createThirdGen();
 }
 
@@ -33,7 +33,7 @@ void P2_Scene::update(double dt) {
 
 void P2_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
 	if (key == 'v' || key == 'V')
-		_particleSystem->burst(20, 2);
+		_particleSystem->burst(20, 0);
 }
 
 void P2_Scene::createAxes() {
@@ -96,11 +96,11 @@ void P2_Scene::createSecondGen() {
 		ParticleSizeType::FIXED,
 	};
 
-	config2.boxHalfExtents = { 10, 1, 10 }; // not that tall
+	config2.boxHalfExtents = { 20, 1, 20 }; // not that tall
 
 	config2.meanVelocity = { 0, -1, 0 }; // fall down like rain
 	config2.meanSpeed = 25;
-	config2.devSpeed = 0.2;
+	config2.devSpeed = 1;
 
 	config2.realToSimSpeedRatio = 10; // real speed is 10x higher than sim speed
 
@@ -119,7 +119,7 @@ void P2_Scene::createSecondGen() {
 	config2.damping = 0.9; // minimal damping
 
 	std::unique_ptr<ParticleGenerator> gen2(new ParticleGenerator(config2));
-	gen2->setSpawnInterval(0.2);
+	gen2->setSpawnInterval(0.05);
 
 	_particleSystem->addGenerator(std::move(gen2));
 
@@ -155,7 +155,7 @@ void P2_Scene::createThirdGen() {
 	config3.damping = 0.9; // minimal damping
 
 	std::unique_ptr<ParticleGenerator> gen3(new ParticleGenerator(config3));
-	gen3->setSpawnInterval(0.4);
+	gen3->setSpawnInterval(0.1);
 
 	_particleSystem->addGenerator(std::move(gen3));
 

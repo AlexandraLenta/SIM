@@ -76,7 +76,7 @@ private:
 	bool _isActive = true;
 
 	// spawn particles every x seconds
-	double _spawnInterval = 0.1;
+	double _spawnInterval = 0.05;
 	double _timer = 0.0;
 
 	std::uniform_real_distribution<float> _uniformDist{ -1, 1 };

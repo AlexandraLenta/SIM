@@ -25,6 +25,7 @@
 #include "P1_Scene.h"
 #include "P2_Scene.h"
 #include "P3_Scene.h"
+#include "Demo_Scene.h"
 
 #include <foundation/PxSimpleTypes.h>
 #include <PxPhysicsVersion.h> // <- Macros for PhysX version checking
@@ -100,7 +101,7 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 	// Registrar las prácticas/escenas del curso
-	SceneManager::instance().registerScene<P3_Scene>("P3");
+	SceneManager::instance().registerScene<Demo_Scene>("P3");
 	
 	// Cargar la escena inicial
 	SceneManager::instance().changeScene("P3");

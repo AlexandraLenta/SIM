@@ -27,7 +27,7 @@ int ParticleGenerator::update(double dt) {
 void ParticleGenerator::initParticle(Particle& p) {
 	Particle p2;
 	p2.position = physx::PxTransform(generateSpawnPosition());
-	Vector3D dir = generateVelocity(p.position.p);
+	Vector3D dir = generateVelocity(p2.position.p);
 	p2.radius = generateSize();
 	p2.lifetime = _config.meanLifetime;
 	p2.damping = _config.damping;

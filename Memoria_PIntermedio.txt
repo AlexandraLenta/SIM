@@ -1,3 +1,6 @@
+JUEGO:
+
+
 REQUISITOS:
 
 Requisito A.1 -> "Particle.cpp" 101-135
