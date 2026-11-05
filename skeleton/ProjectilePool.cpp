@@ -8,7 +8,7 @@ ProjectilePool::ProjectilePool(int nr) : _index(0), _count(nr), _currType((Proje
 	pPistol->radius = 0.3f;
 	pPistol->color = pPistol->iniColor = pPistol->finColor = Vector4(1.0f, 0.9f, 0.2f, 1.0f);
 	pPistol->velocity = { 0, 0, 1 };
-	pPistol->acceleration = { 0, 0, 0 };
+	pPistol->acceleration = { 0, -8, 0 };
 	pPistol->simulatedSpeed = 35;
 	pPistol->realSpeed = 250;
 	pPistol->realMass = 0.005f;
@@ -20,7 +20,7 @@ ProjectilePool::ProjectilePool(int nr) : _index(0), _count(nr), _currType((Proje
 	pArtillery->radius = 0.8f;
 	pArtillery->color = pArtillery->iniColor = pArtillery->finColor = Vector4(0.4f, 0.4f, 0.4f, 1.0f);
 	pArtillery->velocity = { 0, 3, 4 };
-	pArtillery->acceleration = { 0, 0, 0 };
+	pArtillery->acceleration = { 0, -15, 0 };
 	pArtillery->simulatedSpeed = 50;
 	pArtillery->realSpeed = 500;
 	pArtillery->realMass = 50;
@@ -33,8 +33,8 @@ ProjectilePool::ProjectilePool(int nr) : _index(0), _count(nr), _currType((Proje
 	pFireball->color = pFireball->iniColor = Vector4(1.0f, 0.5f, 0.0f, 1.0f);
 	pFireball->finColor = Vector4(1.0f, 0.1f, 0.0f, 1.0f);
 	pFireball->velocity = { 0, 0, 1 };
-	pFireball->acceleration = { 0, 0.6f, 0 };  
-	pFireball->simulatedSpeed = 5;
+	pFireball->acceleration = { 0, 3, 0 };  
+	pFireball->simulatedSpeed = 15;
 	pFireball->realSpeed = 100;
 	pFireball->realMass = 1;
 	pFireball->realGravity = 0;
