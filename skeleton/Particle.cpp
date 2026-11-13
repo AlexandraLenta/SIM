@@ -1,7 +1,7 @@
 #include "Particle.h"
 #include "GunManager.h"
 
-Particle::Particle(float radius, Vector4 color) : radius(radius), color(color) {
+Particle::Particle(float radius, Vector4 color) : radius(radius), color(color), iniColor(color), finColor(color) {
 	createRenderItem();
 }
 
@@ -161,13 +161,15 @@ void Particle::applyForce(Vector3D f) {
 }
 
 void Particle::update(double t) {
-	if (age >= lifetime) {
+	if (lifetime > 0 && age >= lifetime) {
 		alive = false;
 		renderItem->visible = false;
 	}
 	else {
 		integrateEulerSemiImplicit(t);
-		age += t;
+
+		if (lifetime > 0)
+			age += t;
 
 		if (iniColor != finColor) {
 			double dt = age / lifetime;

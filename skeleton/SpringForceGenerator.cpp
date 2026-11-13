@@ -7,20 +7,29 @@ void SpringForceGenerator::applyForceToParticle(Particle* p, double t) {
 
 	Vector3D force;
 
-	const float length = relativePos.normalized().magnitude();
+	const float length = relativePos.magnitude();
 	const float deltaX = length - _restingLength;
 
-	force = relativePos * deltaX * _k;
+	force = relativePos.normalized() * deltaX * _k;
 
 	p->applyForce(force);
 }
 
+void SpringForceGenerator::setK(double k) {
+	_k = k;
+}
+
+double SpringForceGenerator::getK() {
+	return _k;
+}
+
 AnchoredSpringForceGenerator::AnchoredSpringForceGenerator(double k, double restL, const Vector3D& anchorPos) : SpringForceGenerator(k, restL, nullptr) {
-	_otherParticle = new Particle(0, {0, 0, 0, 0});
+	_otherParticle = new Particle();
 	_otherParticle->position = physx::PxTransform(anchorPos);
 	_otherParticle->velocity = { 0, 0, 0 };
 }
 
 AnchoredSpringForceGenerator::~AnchoredSpringForceGenerator() {
-	delete _otherParticle; _otherParticle = nullptr;
+	delete _otherParticle; 
+	_otherParticle = nullptr;
 }

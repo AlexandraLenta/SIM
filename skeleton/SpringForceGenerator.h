@@ -9,6 +9,7 @@ public:
     void applyForceToParticle(Particle* p, double t) override;
 
     void setK(double k);
+    double getK();
 
 protected:
     double _k;

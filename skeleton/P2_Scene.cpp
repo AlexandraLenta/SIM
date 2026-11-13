@@ -12,9 +12,9 @@ void P2_Scene::init() {
 
 	_particleSystem = new ParticleSystem();
 
-	//createFirstGen();
+	createFirstGen();
 	//createSecondGen();
-	createThirdGen();
+	//createThirdGen();
 }
 
 void P2_Scene::cleanup() {

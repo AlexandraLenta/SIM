@@ -30,6 +30,7 @@
     <ClCompile Include="ExplosionGenerator.cpp" />
     <ClCompile Include="Demo_Scene.cpp" />
     <ClCompile Include="GunManager.cpp" />
+    <ClCompile Include="P4_Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -63,6 +64,7 @@
     <ClInclude Include="ExplosionGenerator.h" />
     <ClInclude Include="Demo_Scene.h" />
     <ClInclude Include="GunManager.h" />
+    <ClInclude Include="P4_Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
