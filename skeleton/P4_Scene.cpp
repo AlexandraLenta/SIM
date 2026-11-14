@@ -10,7 +10,8 @@ void P4_Scene::init() {
 	
 	_particleSys = new ParticleSystem();
 
-	createAnchoredSpringDemo();
+	//createAnchoredSpringDemo();
+	createSpringDemo();
 }
 
 void P4_Scene::createAnchoredSpringDemo() {
@@ -40,31 +41,72 @@ void P4_Scene::createAnchoredSpringDemo() {
 	p->createRenderItem();
 
 	// GENERATOR ---------------------------------
-	_anchoredSpringGen = static_cast<AnchoredSpringForceGenerator*>(_particleSys->addForceGenerator(std::move(std::unique_ptr<AnchoredSpringForceGenerator>(new AnchoredSpringForceGenerator(50, 10, {0, 17, 0})))));
+	_anchoredSpringGen = static_cast<AnchoredSpringForceGenerator*>(_particleSys->addForceGenerator(std::move(std::unique_ptr<AnchoredSpringForceGenerator>(new AnchoredSpringForceGenerator(50, 10, {0, 17, 0}, p)))));
 	_anchoredSpringGen->setActive(false);
 }
 
+void P4_Scene::createSpringDemo() {
+	// FIRST PARTICLE -------------------------
+	Particle* p1 = _particleSys->spawn();
+
+	p1->position = physx::PxTransform(Vector3D{ -10, 0, 0 });
+	p1->radius = 1;
+	p1->color = { 1, 0, 0, 1 };
+	p1->realGravity = 0;
+	p1->simulatedSpeed = 10;
+	p1->realSpeed = 50;
+
+	p1->lifetime = 0;
+	p1->damping = 0.9; // damping mas bajo para que la particula no vuele mucho cuando reactivamos el generador y esta muy lejos
+
+	p1->calculateSimulatedValues();
+	p1->createRenderItem();
+
+	// SECOND PARTICLE -------------------------
+	Particle* p2 = _particleSys->spawn();
+
+	p2->position = physx::PxTransform(Vector3D{ 10, 0, 0 });
+	p2->radius = 1;
+	p2->color = { 0, 1, 0, 1 };
+	p2->realGravity = 0;
+	p2->simulatedSpeed = 10;
+	p2->realSpeed = 50;
+
+	p2->lifetime = 0;
+	p2->damping = 0.9; // damping mas bajo para que la particula no vuele mucho cuando reactivamos el generador y esta muy lejos
+
+	p2->calculateSimulatedValues();
+	p2->createRenderItem();
+
+	// GENERATOR ---------------------------------
+	_springGen = static_cast<ElasticForceGenerator*>(_particleSys->addForceGenerator(std::move(std::unique_ptr<ElasticForceGenerator>(new ElasticForceGenerator(50, 10, p1, p2)))));
+	_springGen->setActive(true);
+}
+
 void P4_Scene::update(double dt) {
-	_particleSys->update(dt);
+	if (_particleSys)
+		_particleSys->update(dt);
 }
 
 void P4_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
-	if (key == 'f' || key == 'F') {
-		_anchoredSpringGen->setActive(!_anchoredSpringGen->getActive());
-		if (_anchoredSpringGen->getActive()) {
-			std::cout << "Activated anchored spring.\n";
+	if (_anchoredSpringGen) {
+		if (key == 'f' || key == 'F') {
+			_anchoredSpringGen->setActive(!_anchoredSpringGen->getActive());
+			if (_anchoredSpringGen->getActive()) {
+				std::cout << "Activated anchored spring.\n";
+			}
+			else {
+				std::cout << "Deactivated anchored spring.\n";
+			}
 		}
-		else {
-			std::cout << "Deactivated anchored spring.\n";
+		else if (key == 'i' || key == 'I') {
+			_anchoredSpringGen->setK(_anchoredSpringGen->getK() - 1);
+			std::cout << "Decreased K: " << _anchoredSpringGen->getK() << '\n';
 		}
-	}
-	else if (key == 'i' || key == 'I') {
-		_anchoredSpringGen->setK(_anchoredSpringGen->getK() - 1);
-		std::cout << "Decreased K: " << _anchoredSpringGen->getK() << '\n';
-	}
-	else if (key == 'o' || key == 'O') {
-		_anchoredSpringGen->setK(_anchoredSpringGen->getK() + 1);
-		std::cout << "Increased K: " << _anchoredSpringGen->getK() << '\n';
+		else if (key == 'o' || key == 'O') {
+			_anchoredSpringGen->setK(_anchoredSpringGen->getK() + 1);
+			std::cout << "Increased K: " << _anchoredSpringGen->getK() << '\n';
+		}
 	}
 }
 
@@ -83,6 +125,11 @@ void P4_Scene::cleanup() {
 	if (_anchoredSpringGen) {
 		delete _anchoredSpringGen;
 		_anchoredSpringGen = nullptr;
+	}
+
+	if (_springGen) {
+		delete _springGen;
+		_springGen = nullptr;
 	}
 }
 

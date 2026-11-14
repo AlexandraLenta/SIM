@@ -23,10 +23,12 @@ private:
     std::vector<RenderItem*> _items;
 
     AnchoredSpringForceGenerator* _anchoredSpringGen = nullptr;
+    ElasticForceGenerator* _springGen = nullptr;
 
     ParticleSystem* _particleSys = nullptr;
 
     void createAxes();
 
     void createAnchoredSpringDemo();
+    void createSpringDemo();
 };
