@@ -4,6 +4,7 @@
 #include "RenderUtils.hpp"
 #include "SpringForceGenerator.h"
 #include "ParticleSystem.h"
+#include "BuoyancyGenerator.h"
 
 class P4_Scene :
     public Scene
@@ -24,6 +25,7 @@ private:
 
     AnchoredSpringForceGenerator* _anchoredSpringGen = nullptr;
     ElasticForceGenerator* _springGen = nullptr;
+    BuoyancyGenerator* _buoyancyGen = nullptr;
 
     ParticleSystem* _particleSys = nullptr;
 
@@ -31,4 +33,5 @@ private:
 
     void createAnchoredSpringDemo();
     void createSpringDemo();
+    void createFloatDemo();
 };

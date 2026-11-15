@@ -4,8 +4,13 @@
 
 struct BulletConfig;
 
+enum class ParticleShape { Sphere, Box };
+
 struct Particle {
-	float radius = 2;
+	float radius = 2; // sphere radius
+	Vector3D cubeExtents = { 2, 2, 2 }; // box half extents
+	ParticleShape shapeType = ParticleShape::Sphere;
+
 	Vector4 color = { 0, 0, 0, 1 };
 	Vector4 iniColor = { 0, 0, 0, 1 };
 	Vector4 finColor = { 0, 0, 0, 1 };
@@ -35,8 +40,9 @@ struct Particle {
 	double lifetime = 10;
 	double age = 0.0;
 
-	Particle() = default;
+	Particle() = default; 
 	Particle(float radius, Vector4 color);
+	Particle(physx::PxVec3 halfExtents, Vector4 color);
 	Particle(Particle& config);
 	~Particle();
 	
@@ -44,6 +50,7 @@ struct Particle {
 	void init(BulletConfig& config);
 
 	void createRenderItem();
+	void rebuildRenderItem();
 
 	void update(double t);
 
@@ -62,6 +69,7 @@ struct Particle {
 	Vector4 lerpColor(Vector4 a, Vector4 b, double t);
 
 protected:
+	bool geometryChanged(ParticleShape newShape, float newRadius, const Vector3D& newExtents) const;
 
 	void clearAccumulators();
 

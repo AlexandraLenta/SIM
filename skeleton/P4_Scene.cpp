@@ -11,7 +11,8 @@ void P4_Scene::init() {
 	_particleSys = new ParticleSystem();
 
 	//createAnchoredSpringDemo();
-	createSpringDemo();
+	//createSpringDemo();
+	createFloatDemo();
 }
 
 void P4_Scene::createAnchoredSpringDemo() {
@@ -81,6 +82,28 @@ void P4_Scene::createSpringDemo() {
 	// GENERATOR ---------------------------------
 	_springGen = static_cast<ElasticForceGenerator*>(_particleSys->addForceGenerator(std::move(std::unique_ptr<ElasticForceGenerator>(new ElasticForceGenerator(50, 10, p1, p2)))));
 	_springGen->setActive(true);
+}
+
+void P4_Scene::createFloatDemo()
+{
+	Particle* p = _particleSys->spawn();
+	p->cubeExtents = { 1, 1, 1 };
+	p->shapeType = ParticleShape::Box;
+	p->color = { 1, 0, 0, 1 };
+	p->position = physx::PxTransform({ 0, 3, 0 });
+	p->realGravity = -9.8;
+	p->simulatedSpeed = 10;
+	p->realSpeed = 50;
+	p->realMass = 500 * 2 * 2 * 2;
+
+	p->lifetime = 0;
+	p->damping = 0.99; // damping mas bajo para que la particula no vuele mucho cuando reactivamos el generador y esta muy lejos
+
+	p->calculateSimulatedValues();
+	p->rebuildRenderItem();
+
+	_buoyancyGen = static_cast<BuoyancyGenerator*>(_particleSys->addForceGenerator(std::move(std::unique_ptr<BuoyancyGenerator>(new BuoyancyGenerator(2, 1000)))));
+	_buoyancyGen->setActive(true);
 }
 
 void P4_Scene::update(double dt) {

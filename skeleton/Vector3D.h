@@ -75,8 +75,12 @@ public:
 		return v1.cross(v2);
 	}
 
-	bool operator==(const Vector3D& other) {
+	bool operator==(const Vector3D& other) const {
 		return _x == other._x && _y == other._y && _z == other._z;
+	}
+
+	bool operator!=(const Vector3D& other) const {
+		return !(*this == other);
 	}
 
 	Vector3D& operator=(const Vector3D& other) {

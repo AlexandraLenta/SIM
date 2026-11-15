@@ -1,7 +1,13 @@
 #include "Particle.h"
 #include "GunManager.h"
 
-Particle::Particle(float radius, Vector4 color) : radius(radius), color(color), iniColor(color), finColor(color) {
+Particle::Particle(float radius, Vector4 color)
+	: radius(radius), shapeType(ParticleShape::Sphere), color(color), iniColor(color), finColor(color) {
+	createRenderItem();
+}
+
+Particle::Particle(physx::PxVec3 halfExtents, Vector4 color)
+	: cubeExtents(halfExtents), shapeType(ParticleShape::Box), color(color), iniColor(color), finColor(color) {
 	createRenderItem();
 }
 
@@ -10,7 +16,11 @@ Particle::Particle(Particle& config) : renderItem(nullptr) {
 }
 
 void Particle::init(Particle& config) {
+	bool rebuild = geometryChanged(config.shapeType, config.radius, config.cubeExtents);
+
+	shapeType = config.shapeType;
 	radius = config.radius;
+	cubeExtents = config.cubeExtents;
 	color = config.iniColor;
 	iniColor = config.iniColor;
 	linearIni = rgb2linear(iniColor);
@@ -41,15 +51,18 @@ void Particle::init(Particle& config) {
 	
 	alive = true;
 
-
-	if (renderItem) renderItem->changeColor(color);   // reset the visual too
-	else createRenderItem();
+	if (rebuild) rebuildRenderItem();       // geometry changed (or no item yet)
+	else renderItem->changeColor(color);    // same geometry, just reset the color
 
 	renderItem->visible = true;
 }
 
 void Particle::init(BulletConfig& config) {
+	bool rebuild = geometryChanged(config.shapeType, config.radius, config.cubeExtents);
+
+	shapeType = config.shapeType;
 	radius = config.radius;
+	cubeExtents = config.cubeExtents;
 	color = config.color;
 	iniColor = config.iniColor;
 	finColor = config.finColor;
@@ -78,8 +91,8 @@ void Particle::init(BulletConfig& config) {
 
 	calculateSimulatedValues();
 
-	if (renderItem) renderItem->changeColor(color);   // reset the visual too
-	else createRenderItem();
+	if (rebuild) rebuildRenderItem();
+	else renderItem->changeColor(color);
 
 	renderItem->visible = true;
 }
@@ -89,10 +102,37 @@ void Particle::calculateInverseMass() {
 }
 
 void Particle::createRenderItem() {
-	// crear la particula visualmente
-	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
+	physx::PxShape* shape = nullptr;
+
+	switch (shapeType) {
+	case ParticleShape::Box:
+		shape = CreateShape(physx::PxBoxGeometry(cubeExtents));
+		break;
+	case ParticleShape::Sphere:
+	default:
+		shape = CreateShape(physx::PxSphereGeometry(radius));
+		break;
+	}
+
 	renderItem = new RenderItem(shape, &position, color);
 	shape->release();
+}
+
+void Particle::rebuildRenderItem() {
+	if (renderItem) {
+		renderItem->release();
+		renderItem = nullptr;
+	}
+	createRenderItem();
+}
+
+bool Particle::geometryChanged(ParticleShape newShape, float newRadius, const Vector3D& newExtents) const {
+	if (!renderItem || shapeType != newShape) return true;
+
+	// only compare the parameter used by current shape
+	return newShape == ParticleShape::Box
+		? cubeExtents != newExtents
+		: radius != newRadius;
 }
 
 Particle::~Particle() {

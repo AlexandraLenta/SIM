@@ -5,6 +5,8 @@
 class ParticleSystem;
 
 struct BulletConfig {
+	ParticleShape shapeType = ParticleShape::Sphere;
+	Vector3 cubeExtents = { 2, 2, 2 };
 	float radius = 0.5;
 	Vector4 color = { 0, 0, 0, 1 };
 	Vector4 iniColor = { 0, 0, 0, 1 };
