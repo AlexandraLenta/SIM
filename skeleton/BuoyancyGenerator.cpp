@@ -15,24 +15,27 @@ BuoyancyGenerator::~BuoyancyGenerator() {
 }
 
 void BuoyancyGenerator::applyForceToParticle(Particle* p, double t) {
-    float h = p->position.p.y;
-    float h0 = _liquidParticle->position.p.y + _height;      // surface = top of liquid box
+    float h = p->position.p.y; // position of the center of the object
+    float h0 = _liquidParticle->position.p.y + _height; // position of the surface of the liquid
 
-    float objHeight = 2.0f * p->cubeExtents.y();                // half-extents -> full height
+    float objHeight = 2.0f * p->cubeExtents.y(); // cube extents is half the edge length
     float objVolume = 8.0f * p->cubeExtents.x() * p->cubeExtents.y() * p->cubeExtents.z();
 
-    float immersed;
+    float immersed; // fraction of object submerged
 
-    if (h - h0 > objHeight * 0.5f)       
+    float speedRatio = p->realSpeed / p->simulatedSpeed; // for calculating simulated liquid density
+
+    // if object is above halfway submerged
+    if (h - h0 > objHeight * 0.5f)   
         immersed = 0.0f;
     else if (h0 - h > objHeight * 0.5f)  
         immersed = 1.0f;
     else
         immersed = (h0 - h) / objHeight + 0.5f;
 
-    float g = std::abs(p->realGravity);
+    float g = std::abs(p->simulatedGravity);
 
-    Vector3D force(0, _liquidDensity * objVolume * immersed * g, 0);
+    Vector3D force(0, _liquidDensity * objVolume * immersed * g * speedRatio * speedRatio, 0);
 
     p->applyForce(force);
 }

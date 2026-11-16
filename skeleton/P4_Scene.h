@@ -28,6 +28,7 @@ private:
     BuoyancyGenerator* _buoyancyGen = nullptr;
 
     ParticleSystem* _particleSys = nullptr;
+    Particle* _floatingParticle = nullptr;
 
     void createAxes();
 

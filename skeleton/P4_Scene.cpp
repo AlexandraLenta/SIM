@@ -86,21 +86,21 @@ void P4_Scene::createSpringDemo() {
 
 void P4_Scene::createFloatDemo()
 {
-	Particle* p = _particleSys->spawn();
-	p->cubeExtents = { 1, 1, 1 };
-	p->shapeType = ParticleShape::Box;
-	p->color = { 1, 0, 0, 1 };
-	p->position = physx::PxTransform({ 0, 3, 0 });
-	p->realGravity = -9.8;
-	p->simulatedSpeed = 10;
-	p->realSpeed = 50;
-	p->realMass = 500 * 2 * 2 * 2;
+	_floatingParticle = _particleSys->spawn();
+	_floatingParticle->cubeExtents = { 1, 1, 1 };
+	_floatingParticle->shapeType = ParticleShape::Box;
+	_floatingParticle->color = { 1, 0, 0, 1 };
+	_floatingParticle->position = physx::PxTransform({ 0, 3, 0 });
+	_floatingParticle->realGravity = -9.8;
+	_floatingParticle->simulatedSpeed = 10;
+	_floatingParticle->realSpeed = 50;
+	_floatingParticle->realMass = 500 * 2 * 2 * 2;
 
-	p->lifetime = 0;
-	p->damping = 0.99; // damping mas bajo para que la particula no vuele mucho cuando reactivamos el generador y esta muy lejos
+	_floatingParticle->lifetime = 0;
+	_floatingParticle->damping = 0.9; // damping mas bajo para que la particula no vuele mucho cuando reactivamos el generador y esta muy lejos
 
-	p->calculateSimulatedValues();
-	p->rebuildRenderItem();
+	_floatingParticle->calculateSimulatedValues();
+	_floatingParticle->rebuildRenderItem();
 
 	_buoyancyGen = static_cast<BuoyancyGenerator*>(_particleSys->addForceGenerator(std::move(std::unique_ptr<BuoyancyGenerator>(new BuoyancyGenerator(2, 1000)))));
 	_buoyancyGen->setActive(true);
@@ -129,6 +129,18 @@ void P4_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
 		else if (key == 'o' || key == 'O') {
 			_anchoredSpringGen->setK(_anchoredSpringGen->getK() + 1);
 			std::cout << "Increased K: " << _anchoredSpringGen->getK() << '\n';
+		}
+	}
+	if (_buoyancyGen) {
+		if (key == 'i' || key == 'I') {
+			_floatingParticle->realMass = std::max<float>((_floatingParticle->realMass / 8.f - 100) * 8.f, 0);
+			_floatingParticle->calculateSimulatedValues();
+			std::cout << "Decreased real mass: " << _floatingParticle->realMass << '\n';
+		}
+		else if (key == 'o' || key == 'O') {
+			_floatingParticle->realMass = (_floatingParticle->realMass / 8.f + 100) * 8.f;
+			_floatingParticle->calculateSimulatedValues();
+			std::cout << "Increased real mass: " << _floatingParticle->realMass << '\n';
 		}
 	}
 }
