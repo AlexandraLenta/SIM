@@ -4,7 +4,7 @@
 // Fuerza proporcional a la velocidad del solido relativa al aire (a mayor diferencia de velocidad, mas empuje).
 class VientoSR : public GeneradorFuerzaSR {
 public:
-	VientoSR(Vector3 vel = Vector3(20.0f, 0.0f, 0.0f));
+	VientoSR(Vector3 vel = Vector3(20.0f, 0.0f, 0.0f), float k1 = 0.5, float k2 = 0);
 
 	void updateForce(SolidoRigido* solido) override;
 
@@ -13,4 +13,6 @@ public:
 
 protected:
 	Vector3 _vel;
+	float _k1;
+	float _k2;
 };

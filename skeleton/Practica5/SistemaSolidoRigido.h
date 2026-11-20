@@ -32,6 +32,11 @@ public:
 	// o el solido caera con el doble de aceleracion.
 	void activarGravedad(bool activa);
 	void activarViento(bool activa, Vector3 vel = Vector3(20.0f, 0.0f, 0.0f));
+	void activarTorbellino(bool activa, Vector3 centro = {0, 0, 0}, float intensidad = 40);
+
+	bool getTorbellinoActivo();
+	bool getVientoActivo();
+	bool getGravedadActiva();
 
 	inline const std::vector<SolidoRigido*>& getSolidos() const { return _solidos; }
 
@@ -62,6 +67,7 @@ protected:
 
 	bool _gravedadActiva;
 	bool _vientoActivo;
+	bool _torbellinoActivo;
 
 	Vector3 _origen;
 	Vector3 _velocidadMedia;

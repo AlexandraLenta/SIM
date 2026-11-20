@@ -52,7 +52,7 @@ void EscenaSolidosRigidos::keyPress(unsigned char key)
 
 	case '1':
 		if (!_activa) break;
-			//_sistema->activarGravedad(true);
+			_sistema->activarGravedad(!_sistema->getGravedadActiva());
 		break;
 
 
@@ -122,6 +122,15 @@ void EscenaSolidosRigidos::keyPress(unsigned char key)
 		_bloqueado = nullptr;
 		_bloqueadoInerciaManual = nullptr;
 		break;
+
+	case 'T':
+		if (!_activa) break;
+		_sistema->activarTorbellino(!_sistema->getTorbellinoActivo());
+		break;
+	
+	case 'V':
+		if (!_activa) break;
+		_sistema->activarViento(!_sistema->getVientoActivo(), {200, 100, 0});
 
 	default:
 		break;

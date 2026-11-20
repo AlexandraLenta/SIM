@@ -94,10 +94,10 @@ void P4_Scene::createFloatDemo()
 	_floatingParticle->realGravity = -9.8;
 	_floatingParticle->simulatedSpeed = 10;
 	_floatingParticle->realSpeed = 50;
-	_floatingParticle->realMass = 500 * 2 * 2 * 2;
+	_floatingParticle->realMass = 600 * 2 * 2 * 2;
 
 	_floatingParticle->lifetime = 0;
-	_floatingParticle->damping = 0.9; // damping mas bajo para que la particula no vuele mucho cuando reactivamos el generador y esta muy lejos
+	_floatingParticle->damping = 0.99; // damping mas bajo para que la particula no vuele mucho cuando reactivamos el generador y esta muy lejos
 
 	_floatingParticle->calculateSimulatedValues();
 	_floatingParticle->rebuildRenderItem();
