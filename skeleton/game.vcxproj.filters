@@ -31,6 +31,14 @@
     <ClCompile Include="Demo_Scene.cpp" />
     <ClCompile Include="GunManager.cpp" />
     <ClCompile Include="P4_Scene.cpp" />
+    <ClCompile Include="Practica5\EjerciciosCuaterniones.cpp" />
+    <ClCompile Include="Practica5\EscenaJoints.cpp" />
+    <ClCompile Include="Practica5\EscenaSolidosRigidos.cpp" />
+    <ClCompile Include="Practica5\GravedadSR.cpp" />
+    <ClCompile Include="Practica5\SistemaSolidoRigido.cpp" />
+    <ClCompile Include="Practica5\SolidoRigido.cpp" />
+    <ClCompile Include="Practica5\TorbellinoSR.cpp" />
+    <ClCompile Include="Practica5\VientoSR.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -65,6 +73,16 @@
     <ClInclude Include="Demo_Scene.h" />
     <ClInclude Include="GunManager.h" />
     <ClInclude Include="P4_Scene.h" />
+    <ClInclude Include="Practica5\EjerciciosCuaterniones.h" />
+    <ClInclude Include="Practica5\EscenaJoints.h" />
+    <ClInclude Include="Practica5\EscenaSolidosRigidos.h" />
+    <ClInclude Include="Practica5\GeneradorFuerzaSR.h" />
+    <ClInclude Include="Practica5\GravedadSR.h" />
+    <ClInclude Include="Practica5\RegistroFuerzasSR.hpp" />
+    <ClInclude Include="Practica5\SistemaSolidoRigido.h" />
+    <ClInclude Include="Practica5\SolidoRigido.h" />
+    <ClInclude Include="Practica5\TorbellinoSR.h" />
+    <ClInclude Include="Practica5\VientoSR.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
