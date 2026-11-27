@@ -246,7 +246,14 @@ PxQuat EjerciciosCuaterniones::ejercicio4()
 PxQuat EjerciciosCuaterniones::ejercicio5()
 {
 	// TODO: angulos de Euler intrinsecos z-y-z equivalentes al ejercicio 1a (Ver ejercicio 2)
-	return PxQuat(PxIdentity); //Cambiar PxIdentity por el cuaternion definido.
+	
+	float z1 = -PxPi / 2.0f, y = PxPi / 6.0f, z2 = PxPi / 2.0f;
+
+	PxQuat qz1(z1, Vector3(0.0f, 0.0f, 1.0f));
+	PxQuat qy(y, Vector3(0.0f, 1.0f, 0.0f));
+	PxQuat qz2(z2, Vector3(0.0f, 0.0f, 1.0f));
+
+	return qz1 * qy * qz2; 
 }
 
 PxQuat EjerciciosCuaterniones::ejercicio6()
@@ -255,7 +262,11 @@ PxQuat EjerciciosCuaterniones::ejercicio6()
 	// Una forma de hacerlo sería construir directamente un cuaternión con dicha matriz de rotación como en el ejercicio 1.
 	// Sin embargo en este ejercicio el objetivo es calcular el cuaternión a mano y luego comprobarlo aquí.
 	// PxQuat(q.x, q.y, q.z, cos(theta/2.0f))
-	return PxQuat(PxIdentity); //Cambiar PxIdentity por el cuaternion definido.
+
+	float z = PxPi / 4.f;
+	Vector3 eje = { 0, 0, 1 };
+
+	return PxQuat(eje.x * sin(z/2.f), eje.y * sin(z/2.f), eje.z * sin(z/2.f), cos(z/2.f)); //Cambiar PxIdentity por el cuaternion definido.
 }
 
 PxQuat EjerciciosCuaterniones::ejercicio7()
@@ -264,13 +275,31 @@ PxQuat EjerciciosCuaterniones::ejercicio7()
 	// Viendo los apuntes una matriz de rotación extrínsica es equivalente a R' = R2*R1
 	// Definir las matrices de rotación como el Ejercicio 1 y luego:
 	// PxMat33 mTotal = m2 * m1; //Usar mTotal para construir el cuaternión final.
-	return PxQuat(PxIdentity);
+	
+	float y = PxPi / 7.2f; // 25 grados
+	PxMat33 m1(Vector3(cos(y), 0.0f, -sin(y)), Vector3(0.0f, 1, 0), Vector3(sin(y), 0, cos(y))); // Cambia la matriz a la que hayas calculado
+	
+	float x = PxPi / 3.6f; // 50 grados
+	PxMat33 m2(Vector3(1, 0.0f, 0), Vector3(0.0f, cos(x), sin(x)), Vector3(0, -sin(x), cos(x))); // Cambia la matriz a la que hayas calculado
+
+	PxMat33 m = m2 * m1;
+
+	return PxQuat(m);
 }
 
 PxQuat EjerciciosCuaterniones::ejercicio8()
 {
 	// TODO: cuaternion que representa la misma rotacion que el ejercicio 7.
-	return PxQuat(PxIdentity);
+
+	float y = PxPi / 7.2f;
+
+	PxQuat q1 = PxQuat(0, sin(y / 2.f), 0, cos(y / 2.f));
+
+	float x = PxPi / 3.6f;
+
+	PxQuat q2 = PxQuat(sin(x /2.f), 0, 0, cos(x / 2.f));
+
+	return q2 * q1;
 }
 
 Vector3 EjerciciosCuaterniones::ejercicio9_1()
