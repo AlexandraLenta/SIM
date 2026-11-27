@@ -31,5 +31,12 @@ Vector3 SolidoRigido::calcularInerciaCaja(float masa, Vector3 mitades)
 {
 	// TODO Actividad 2: usa la formula del cuboide solido del Anexo (a partir de las semi-medidas "mitades") para
 	// devolver el tensor de inercia (Ix,Iy,Iz). De momento devuelve un valor cualquiera para que compile.
-	return Vector3(1.0f, 1.0f, 1.0f);
+
+	float x = (masa * (mitades.y * mitades.y * 4 + mitades.z * mitades.z * 4))/12;
+
+	float y = (masa * (mitades.x * mitades.x * 4 + mitades.z * mitades.z * 4)) / 12;
+
+	float z = (masa * (mitades.x * mitades.x * 4 + mitades.y * mitades.y * 4)) / 12;
+
+	return Vector3(x, y, z);
 }
