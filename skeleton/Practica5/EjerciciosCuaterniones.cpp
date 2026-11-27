@@ -186,26 +186,32 @@ PxQuat EjerciciosCuaterniones::ejercicio1a()
 {
 	// TODO: matriz de rotacion de 30 grados respecto al eje "x".
 	float a = PxPi / 6.0f; // 30 grados
-	PxMat33 m(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f)); // Cambia la matriz a la que hayas calculado
+	PxMat33 m(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, cos(a), sin(a)), Vector3(0.0f, -sin(a), cos(a))); // Cambia la matriz a la que hayas calculado
 	return PxQuat(m);
 }
 
 PxQuat EjerciciosCuaterniones::ejercicio1b()
 {
 	// TODO: matriz de rotacion de 60 grados respecto al eje "y".
-	return PxQuat(PxIdentity); // Cambia PxIdentity por m cuando la tengas definida (ver ejemplo arriba)
+	float a = PxPi / 3.0f; // 60 grados
+	PxMat33 m(Vector3(cos(a), 0.0f, -sin(a)), Vector3(0.0f, 1, 0.0f), Vector3(sin(a), 0, cos(a))); // Cambia la matriz a la que hayas calculado
+	return PxQuat(m); 
 }
 
 PxQuat EjerciciosCuaterniones::ejercicio1c()
 {
 	// TODO: matriz de rotacion de 180 grados respecto al eje "z".
-	return PxQuat(PxIdentity); // Cambia PxIdentity por m cuando la tengas definida (ver ejemplo arriba)
+	float a = PxPi; // 180 grados
+	PxMat33 m(Vector3(cos(a), sin(a), 0.0f), Vector3(-sin(a), cos(a), 0.0f), Vector3(0, 0, 1)); // Cambia la matriz a la que hayas calculado
+	return PxQuat(m);
 }
 
 PxQuat EjerciciosCuaterniones::ejercicio2()
 {
 	// TODO: angulos de Euler intrinsecos z-x-z equivalentes al ejercicio 1a.
-	float z1 = 0.0f, x = 0.0f, z2 = 0.0f; //Cambiar a los ángulos de rotación correspondientes
+	
+	float z1 = 0.0f, x = PxPi / 6.0f, z2 = 0.0f; //Cambiar a los ángulos de rotación correspondientes
+	
 	// Aquí los cuaterniones se definen como pares de rotación (w, (nx,ny,nz)) como los vistos en clase.
 	// Los ejes ya son los de la convencion Z-X-Z; PxQuat exige que el eje sea unitario incluso con angulo 0,
 	// por eso no pueden ser (0,0,0).
@@ -219,15 +225,22 @@ PxQuat EjerciciosCuaterniones::ejercicio2()
 PxQuat EjerciciosCuaterniones::ejercicio3()
 {
 	// TODO: eje y angulo de rotacion equivalentes al ejercicio 1a.
-	return PxQuat(PxIdentity); //Cambiar PxIdentity por el cuaternion definido.
+	
+	Vector3 eje = { 1, 0, 0 };
+	float x = PxPi / 6.0f;
+	return PxQuat(x, eje); //Cambiar PxIdentity por el cuaternion definido.
 }
 
 PxQuat EjerciciosCuaterniones::ejercicio4()
 {
 	// TODO: cuaternion (calculado a mano con la formula del angulo mitad) equivalente al ejercicio 1a.
 	// En este ejercicio construiremos el cuaternión usando directamente la definición de cuaternión.
-	// PxQuat(q.x, q.y, q.z, cos(theta/2.0f))
-	return PxQuat(PxIdentity); //Cambiar PxIdentity por el cuaternion definido.
+	 //PxQuat(q.x, q.y, q.z, cos(theta/2.0f))
+
+	Vector3 eje = { 1, 0, 0 };
+	float x = PxPi / 6.0f;
+
+	return PxQuat(eje.x * sin(x/2.f), 0, 0, cos(x/2.f)); //Cambiar PxIdentity por el cuaternion definido.
 }
 
 PxQuat EjerciciosCuaterniones::ejercicio5()
