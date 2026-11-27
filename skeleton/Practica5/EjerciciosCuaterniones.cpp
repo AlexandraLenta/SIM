@@ -305,11 +305,26 @@ PxQuat EjerciciosCuaterniones::ejercicio8()
 Vector3 EjerciciosCuaterniones::ejercicio9_1()
 {
 	// TODO: donde queda P=(10,20,30) tras rotarlo con el cuaternion Q=(0.98,0,0.22,0) del enunciado (w,x,y,z).
-	return Vector3(0.0f, 0.0f, 0.0f); //Devolver P rotado
+
+	PxQuat q = PxQuat(0, 0.22, 0, 0.98);
+	q.normalize();
+	PxQuat qI = q.getConjugate();
+
+	Vector3 p = { 10, 20, 30 };
+	PxQuat pQuat(p.x, p.y, p.z, 0); // punto -> quaternion puro (0 angulo)
+
+	PxQuat r = q * pQuat * qI;
+
+	//return Vector3(r.x, r.y, r.z);
+	return q.rotate(p);
 }
 
 Vector3 EjerciciosCuaterniones::ejercicio9_2()
 {
 	// TODO: donde queda P=(0,0,0) tras la misma rotacion? Piensa por que pasa esto.
-	return Vector3(0.0f, 0.0f, 0.0f); //Devolver P rotado
+	// Se queda en la misma posicion, porque rota sobre el sistema de referencia del mundo y esta justo en el centro.
+	// Por lo tanto, segun la formula, p' = q * p * q', multiplicar por el punto {0, 0, 0} nos da {0, 0, 0}
+	// Sin embargo, no significa que el objeto no rote: tendria que cambiar su orientacion.
+	// Para eso, utilizaria una variable PxTransform(position, quaternion), y rotaria el objeto sobre si mismo.
+	return Vector3(0.0f, 0.0f, 0.0f);
 }

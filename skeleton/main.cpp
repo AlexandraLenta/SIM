@@ -33,6 +33,7 @@
 
 #include "Practica5/EscenaSolidosRigidos.h"
 #include "Practica5/EjerciciosCuaterniones.h"
+#include "Practica5/EscenaJoints.h"
 
 #define PVD_HOST "127.0.0.1" // IP localhost for PVD connection
 
@@ -59,6 +60,7 @@ ContactReportCallback gContactReportCallback;
 
 EscenaSolidosRigidos gEscenaP5;
 EjerciciosCuaterniones gEjerciciosP5;
+EscenaJoints gEscenaJoints;
 
 // Global variables for physics timing. We use a fixed timestep for physics simulation, and accumulate time to determine when to step the physics simulation.
 double gPhysicsTimeAccumulator = 0.0;
@@ -110,6 +112,7 @@ void initPhysics(bool interactive)
 
 	gEscenaP5.init(gPhysics, gScene);
 	gEjerciciosP5.init(gPhysics, gScene);
+	gEscenaJoints.init(gPhysics, gScene);
 
 	// Registrar las prácticas/escenas del curso
 	//SceneManager::instance().registerScene<P4_Scene>("Demo");
